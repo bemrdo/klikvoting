@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block sub_content %}
+
+<main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
+    {% include '_navbar.html' %}
+
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card max-height-vh-table">
+                    <div class="card-header pb-0">
+                        <h6>Daftar Kegiatan Voting</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4 fit">No</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">ID Voting</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Nama Kegiatan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Deskripsi</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center">Tanggal Mulai</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center">Tanggal Selesai</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center">Status</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end">Opsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if userVotings != None: %}
+                                    {% for userVoting in userVotings: %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <p class="text-sm font-weight-bold mb-0">{{loop.index}}</p>
+                                        </td>
+                                        <td class="ps-2">
+                                            <p class="text-sm font-weight-bold mb-0">{{userVoting['id_voting']}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            <p class="text-sm font-weight-bold mb-0">{{userVoting['name']}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            <p class="text-sm text-secondary mb-0">{{userVoting['voting_desc']}}</p>
+                                        </td>
+                                        <td class="text-center text-sm text-secondary mb-0">
+                                            <p class="text-sm text-secondary mb-0">{{userVoting['date_start'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                        </td>
+                                        <td class="text-center text-sm text-secondary mb-0">
+                                            <p class="text-sm text-secondary mb-0">{{userVoting['date_end'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                        </td>
+                                        <td class="text-center fit">
+                                            {% if userVoting['date_start'] > now: %}
+                                            <p class="text-gradient text-warning text-sm">Nonaktif</p>
+                                            {% elif userVoting['date_end'] < now: %}
+                                            <p class="text-gradient text-dark text-sm">Selesai</p>
+                                            {% else: %}
+                                            <p class="text-gradient text-success text-sm">Aktif</p>
+                                            {% endif %}
+                                        </td>
+                                        <td class="fit pe-3 text-end">
+                                            <a href="/organizer/voting/{{userVoting['id_voting']}}" class="btn btn-xs bg-gradient-secondary mb-0">Candidate & Voter</a>
+                                            <br>
+                                            <a href="/organizer/voting/delete/{{userVoting['id_voting']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-1">Hapus</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="8">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Data Voting tidak ditemukan</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+{% include '_script.html' %}
+{% endblock %}

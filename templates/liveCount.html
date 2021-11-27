@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+{% block sub_content %}
+
+<main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+        <div class="container-fluid py-1 px-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                    {% if session['login'] == True: %}
+                    <li class="breadcrumb-item text-sm text-primary">{{session['role'].capitalize()}}</li>
+                    {% endif %}
+                    {% for page in core['page']: %}
+                    <li class="breadcrumb-item text-sm text-dark">{{page}}</li>
+                    {% endfor %}
+                </ol>
+                <h6 class="font-weight-bolder mb-0">{{core['subtitle']}}</h6>
+            </nav>
+            {% if session['login'] == True: %}
+            <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+                <ul class="navbar-nav justify-content-end ms-auto">
+                    <li class="nav-item d-flex align-items-center">
+                        <div class="nav-link text-body font-weight-bold px-0">
+                            <a href="/voting-page/" class="btn btn-sm bg-gradient-info my-0 ms-0 me-3"><i class="fas fa-vote-yea fs-6 me-2"></i>Halaman Voting</a>
+                        </div>
+                    </li>
+                    <li class="nav-item d-flex align-items-center">
+                        <div class="nav-link text-body font-weight-bold px-0">
+                            <i class="fa fa-user me-sm-1"></i>
+                            <span class="d-sm-inline d-none">{{session['name'].capitalize()}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                        <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                            <div class="sidenav-toggler-inner">
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item px-3 d-flex align-items-center">
+                        <a href="/voting-page/logout/" class="nav-link text-gradient text-danger font-weight-bold px-0">
+                            <i class="fas fa-sign-out-alt me-sm-1"></i>
+                            <span class="d-sm-inline d-none">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            {% else: %}
+            <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+                <ul class="navbar-nav justify-content-end ms-auto">
+                    <li class="nav-item d-flex align-items-center">
+                        <div class="nav-link text-body font-weight-bold px-0">
+                            <a href="/voting-page/login/{{id_voting}}" class="btn btn-sm bg-gradient-primary my-0 ms-0 me-3"><i class="fas fa-sign-in-alt fs-6 me-2"></i>Login</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+    <!-- End Navbar -->
+
+    <div class="container-fluid">
+        <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('{{url_for('static', filename='images/core/profile3.jpg')}}'); background-position-y: 50%;">
+        </div>
+        <div class="card card-body blur shadow-blur mx-4 mt-n55 overflow-hidden">
+            <div class="row">
+                <div class="col">
+                    <div class="h-100">
+                        <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">
+                            {{votingDetail['id_voting']}}
+                            {% if votingDetail['date_start'] > now: %}
+                            <span class="badge bg-gradient-warning text-xxs">Nonaktif</span>
+                            {% elif votingDetail['date_end'] < now: %}
+                            <span class="badge bg-gradient-dark text-xxs">Selesai</span>
+                            {% else: %}
+                            <span class="badge bg-gradient-success text-xxs">Aktif</span>
+                            {% endif %}
+                        </p>
+                        <h5 class="mb-1">
+                            {{votingDetail['name']}}
+                        </h5>
+                    </div>
+                </div>
+                <div class="col-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+                    <div class="row">
+                        <div class="col">
+                            <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Deskripsi Kegiatan</p>
+                            <p class="text-sm text-dark mb-0">{{votingDetail['voting_desc']}}</p>
+                        </div>
+                        <div class="col-auto">
+                            <div class="row">
+                                <div class="col-auto text-center">
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Mulai - Selesai</p>
+                                    <p class="text-sm text-dark mb-0">{{votingDetail['date_start'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                    <p class="text-sm text-dark mb-0">{{votingDetail['date_end'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto text-center">
+                            <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Validasi Terakhir</p>
+                            <p class="text-sm text-dark mb-0">{{votingDetail['last_checked'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-5">
+                <div class="card max-height-vh-vot">
+                    <div class="card-header pb-0 text-center">
+                        <h6>Grafik Data Perolehan Live Count Hasil Voting</h6>
+                    </div>
+                    <div class="card-body pe-6 py-2 mb-3">
+                        <div class="chart">
+                            <canvas id="pie-chart" class="chart-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-7">
+                <div class="card max-height-vh-report">
+                    <div class="card-header pb-0">
+                        <h6>Perolehan Live Count Hasil Voting</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center ps-4 fit">No</th>
+                                        {% if votingDetail['cavatar']: %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center px-2 fit">Foto</th>
+                                        {% endif %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2 fit">ID Candidate</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Nama</th>
+                                        {% if votingDetail['cdesc']: %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder fit">Deskripsi</th>
+                                        {% endif %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2 fit">Hasil Voting</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if votingCounts != None: %}
+                                    {% for votingCount in votingCounts: %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <p class="text-sm font-weight-bold mb-0">{{loop.index}}</p>
+                                        </td>
+                                        {% if votingDetail['cavatar']: %}
+                                        <td class="text-center">
+                                            <div class="px-2 py-1">
+                                                <img src="/static/images/candidate/{{votingCount['avatar']}}" class="avatar-cardid" id='avatar' type="button" onclick="candidate('{{votingCount['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
+                                            </div>
+                                        </td>
+                                        {% endif %}
+                                        <td>
+                                            <p class="text-sm font-weight-bold mb-0">{{votingCount['id_candidate']}}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-sm font-weight-bold mb-0">{{votingCount['name']}}</p>
+                                        </td>
+                                        {% if votingDetail['cdesc']: %}
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-xs bg-gradient-primary mb-0" onclick="preview('{{votingCount['description']}}')" data-bs-toggle="modal" data-bs-target="#modal-preview">Deskripsi</button>
+                                        </td>
+                                        {% endif %}
+                                        <td>
+                                            <p class="text-sm font-weight-bold mb-0">{{votingCount['result']}} suara</p>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Data Live Count tidak ditemukan</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Card ID -->
+    <div class="modal fade" id="modal-avatar" tabindex="-1" role="dialog" aria-labelledby="modal-cardid" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Foto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body align-middle text-center">
+                    <img src="" class="img-fluid border-radius-lg avatar-responsive" alt="Avatar" id="img_avatar">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Deskripsi -->
+    <div class="modal fade" id="modal-preview" tabindex="-1" role="dialog" aria-labelledby="modal-preview" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                    <h5 class="modal-title mx-auto">Deskripsi</h5>
+                </div>
+                <div class="modal-body align-middle ql-editor" id="preview-body">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer pt-0 pb-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-8 mx-auto text-center mt-1">
+                    <p class="mb-0 text-secondary">
+                        Copyright © <script>
+                            document.write(new Date().getFullYear())
+
+                        </script> <i class="fa fa-heart"></i> <span class="font-weight-bold">KlikVoting Web App</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+</main>
+
+{% include '_script.html' %}
+
+<!-- Chart -->
+<script src="{{url_for('static', filename='styles/js/chartjs.min.js')}}"></script>
+
+<script type="text/javascript">
+    // Pie chart
+    var ctx = document.getElementById("pie-chart").getContext("2d");
+
+    new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: [
+                {% if votingCounts != None %}
+                {% for votingCount in votingCounts: %}
+                '{{votingCount['name']}}'
+                {{', ' if not loop.last}}
+                {% endfor %}
+                {% endif %}
+            ],
+            datasets: [{
+                label: "Live Count",
+                weight: 9,
+                cutout: 0,
+                tension: 0.9,
+                pointRadius: 2,
+                borderWidth: 2,
+                backgroundColor: ['#4878d0', '#ee854a', '#6acc64', '#d65f5f', '#956cb4', '#8c613c', '#dc7ec0', '#797979', '#d5bb67', '#82c6e2'],
+                data: [
+                    {% if votingCounts != None %}
+                    {% for votingCount in votingCounts: %}
+                    '{{votingCount['result']}}'
+                    {{', ' if not loop.last}}
+                    {% endfor %}
+                    {% endif %}
+                ],
+                fill: false
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'right',
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            },
+            scales: {
+                y: {
+                    grid: {
+                        drawBorder: false,
+                        display: false,
+                        drawOnChartArea: false,
+                        drawTicks: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                x: {
+                    grid: {
+                        drawBorder: false,
+                        display: false,
+                        drawOnChartArea: false,
+                        drawTicks: false,
+                    },
+                    ticks: {
+                        display: false,
+                    }
+                },
+            },
+        },
+    });
+
+</script>
+<script type="text/javascript">
+    function candidate(value) {
+        var avatar = value
+        $("#img_avatar").attr('src', '/static/images/candidate/' + avatar);
+    }
+    
+    function preview(value) {
+        $('#preview-body').html(value)
+
+    }
+
+</script>
+
+{% endblock %}

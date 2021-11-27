@@ -1,0 +1,31 @@
+.my-1 {
+	margin-top: .25rem;
+	margin-bottom: .25rem;
+}
+
+.my-2 {
+	margin-top: 1.1rem;
+	margin-bottom: 1.1rem;
+}
+
+.my-3 {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}
+
+.ml-1 {
+	margin-left: .5rem;
+}
+
+.hr-red {
+	border-top: 1px solid red;
+}
+
+.tz-b {
+	font-size: 5rem;
+}
+
+.mt-1 {
+	margin-top: 1rem;
+	margin-bottom: 0;
+}

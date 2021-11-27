@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block sub_content %}
+
+<div class="container position-sticky z-index-sticky top-0">
+    <div class="row">
+        <div class="col-6">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-transparent position-absolute top-0 z-index-3 w-100 shadow-none my-3 mt-4">
+                <div class="container-fluid">
+                    <ul class="navbar-nav ml">
+                        <li class="nav-item">
+                            <h1 class="font-weight-bolder text-white ms-login">KlikVoting</h1>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- End Navbar -->
+        </div>
+    </div>
+</div>
+<main class="main-content mt-0">
+    <section>
+        <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style="background-image: url('{{url_for('static', filename='images/core/registration.jpg')}}');">
+            <span class="mask bg-gradient-dark opacity-6"></span>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-5 text-center mx-auto">
+                        <h3 class="text-white mb-2 mt-7">Login Voting</h3>
+                        <p class="text-lead text-white">Pastikan data kegiatan voting di bawah merupakan tujuan Anda</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row mt-n12">
+                <div class="col-xl-6 col-lg-7 col-md-8 mx-auto">
+                    <div class="card z-index-0">
+                        <div class="card-header text-center pt-4 pb-0">
+                            <div class="position-relative text-center">
+                                <p class="text-sm font-weight-bold mb-2 text-secondary text-border d-inline z-index-2 bg-white px-3">Lengkapi data berikut dengan benar</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form role="form text-left" method="post" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" placeholder="ID Voting" aria-label="ID Voting" aria-describedby="id-voting-addon" name="id_voting" id="idVotingInput" required>
+                                            <label class="text-muted h6" for="idVotingInput">ID Voting</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 mx-auto">
+                                        <div class="text-center">
+                                            <button type="submit" name="submit" value="landing-voting" class="btn btn-lg bg-gradient-dark w-100 mb-0">Login</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- Footer -->
+<footer class="footer py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-8 mx-auto text-center mt-3">
+                <p class="mb-0 text-secondary">
+                    Copyright © <script>
+                        document.write(new Date().getFullYear())
+
+                    </script> <i class="fa fa-heart"></i> <span class="font-weight-bold">KlikVoting Web App</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+{% include '_script.html' %}
+{% endblock %}

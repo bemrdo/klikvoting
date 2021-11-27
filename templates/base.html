@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" href="{{url_for('static', filename='images/core/favicon.png')}}">
+    <title>{{core['title']}}</title>
+
+    <!-- Bootstrap -->
+    <link href="{{url_for('static', filename='styles/css/bootstrap.min.css')}}" rel="stylesheet" />
+    
+    <!-- Toastify -->
+    <link href="{{url_for('static', filename='styles/css/toastify.css')}}" rel="stylesheet" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/dc9d8ea5a9.js" crossorigin="anonymous"></script>
+
+    {% if session['role'] == 'organizer' and core['subtitle'] in ['Dashboard','Kelola Voting']: %}
+    <!-- Date Range Picker -->
+    <link href="{{url_for('static', filename='styles/css/daterangepicker.css')}}" rel="stylesheet" />
+    {% endif %}
+
+    <!-- CSS Files -->
+    <link id="pagestyle" href="{{url_for('static', filename='styles/css/soft-ui-dashboard.min.css')}}" rel="stylesheet" />
+
+</head>
+
+{% if core['aside']: %}
+
+<body class="g-sidenav-show  bg-gray-100">
+    {% include '_aside.html' %}
+    {% else: %}
+
+    <body>
+        {% endif %}
+
+
+        {% block content %}
+
+        {% block sub_content %}
+        {% endblock %}
+
+        {% endblock %}
+        {% include '_alert.html' %}
+
+    </body>
+
+</html>

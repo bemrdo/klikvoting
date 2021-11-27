@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+{% block sub_content %}
+
+<main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
+    {% include '_navbar.html' %}
+
+    <div class="container-fluid pt-4">
+        <div class="row">
+            <div class="col">
+                <div class="card max-height-vh-table">
+                    <div class="card-header pb-0">
+                        <h6>Pertanyaan dan Keluhan Organizer</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4">No</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Nama Kegiatan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Pertanyaan/Keluhan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Tanggapan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end">Opsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if organizerProblems != None: %}
+                                    {% for problem in organizerProblems: %}
+                                    <tr>
+                                        <td class="ps-4 fit">
+                                            <p class="text-sm font-weight-bold mb-0">{{loop.index}}</p>
+                                        </td>
+                                        <td class="text-wrap min-width-150">
+                                            <p class="text-sm font-weight-bold mb-0">{{problem['voting']}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            <p class="text-sm mb-0">{{problem['message']}}</p>
+                                            <p class="text-xxs text-secondary pt-2 mb-0">{{problem['msg_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            {% if problem['respond'] != None: %}
+                                            <p class="text-sm mb-0">{{problem['respond']}}</p>
+                                            <p class="text-xxs text-secondary pt-2 mb-0">{{problem['rsp_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                            {% endif %}
+                                        </td>
+                                        <td class="fit pe-3 text-end">
+                                            <a href="/organizer/voting/{{problem['id_voting']}}" class="btn btn-xs bg-gradient-info mb-0">Detail Voting</a>
+                                            <br>
+                                            <a href="/organizer/problem/delete/{{problem['id_problem']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-1">Hapus</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Tidak ada pertanyaan dan keluhan dari Organizer</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid pt-4">
+        <div class="row">
+            <div class="col">
+                <div class="card max-height-vh-table">
+                    <div class="card-header pb-0">
+                        <h6>Daftar Pertanyaan dan Keluhan Candidate/Voter</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4 fit">ID Voting</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4">Nama Kegiatan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end">Opsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if votingProblems != None: %}
+                                    {% for voting in votingProblems: %}
+                                    {% if voting['problem'] != None: %}
+                                    <tr>
+                                        <td class="ps-4 fit">
+                                            <p class="text-sm font-weight-bold mt-3 mb-0">{{voting['id_voting']}}</p>
+                                        </td>
+                                        <td colspan="2" class="text-wrap">
+                                            <div class="accordion-1">
+                                                <div class="accordion" id="accordionRental">
+                                                    <div class="accordion-item mb-3">
+                                                        <h5 class="accordion-header" id="heading-{{voting['id_voting']}}">
+                                                            <button class="accordion-button border-bottom font-weight-bold {{'collapsed' if voting['solved'] == True}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{voting['id_voting']}}" aria-expanded="{{'false' if voting['solved'] == True else ('true' if voting['solved'] == False else 'false')}}" aria-controls="collapseOne">
+                                                                <p class="text-sm font-weight-bold mb-0">{{voting['name']}}</p>
+                                                                <span class="collapse-close position-absolute end-0 me-3 btn btn-xs bg-gradient-primary mb-0" aria-hidden="true">Buka<i class="ms-2 fas fa-chevron-down"></i></span>
+                                                                <span class="collapse-open position-absolute end-0 me-3 btn btn-xs bg-gradient-primary mb-0" aria-hidden="true">Tutup<i class="ms-1 fas fa-chevron-up"></i></span>
+                                                            </button>
+                                                        </h5>
+                                                        <div id="collapse-{{voting['id_voting']}}" class="accordion-collapse collapse {{'show' if voting['solved'] == False}}" aria-labelledby="heading-{{voting['id_voting']}}" data-bs-parent="#accordionRental" style="">
+                                                            <div class="accordion-body text-sm opacity-8">
+                                                                <div class="table-responsive p-0">
+                                                                    <table class="table mb-0">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4 fit">No</th>
+                                                                                <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Nama</th>
+                                                                                <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Pertanyaan/Keluhan</th>
+                                                                                <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Tanggapan</th>
+                                                                                <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end">Opsi</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {% if voting['problem'] != None: %}
+                                                                            {% for problem in voting['problem']: %}
+                                                                            <tr>
+                                                                                <td class="ps-4 fit">
+                                                                                    <p class="text-sm font-weight-bold mb-0">{{loop.index}}</p>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <p class="text-sm font-weight-bold mb-0">{{problem[problem['msg_from']]}}</p>
+                                                                                    <p class="text-xxs text-secondary pt-2 mb-0">{{problem['msg_from']}}</p>
+                                                                                </td>
+                                                                                <td class="text-wrap">
+                                                                                    <p class="text-sm mb-0">{{problem['message']}}</p>
+                                                                                    <p class="text-xxs text-secondary pt-2 mb-0">{{problem['msg_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                                                                </td>
+                                                                                <td class="text-wrap">
+                                                                                    {% if problem['respond'] != None: %}
+                                                                                    <p class="text-sm mb-0">{{problem['respond']}}</p>
+                                                                                    <p class="text-xxs text-secondary pt-2 mb-0">{{problem['rsp_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                                                                    {% endif %}
+                                                                                </td>
+                                                                                <td class="fit pe-3 text-end">
+                                                                                    {% if problem['respond'] != None: %}
+                                                                                    <button type="button" class="btn btn-xs bg-gradient-secondary mb-0" onclick="respond('{{problem['id_voting']}}','{{problem['id_problem']}}')" data-bs-toggle="modal" data-bs-target="#modal-respond">Edit Tanggapan</button>
+                                                                                    {% else: %}
+                                                                                    <button type="button" class="btn btn-xs bg-gradient-dark mb-0" onclick="respond('{{problem['id_voting']}}','{{problem['id_problem']}}')" data-bs-toggle="modal" data-bs-target="#modal-respond">Berikan Tanggapan</button>
+                                                                                    {% endif %}
+                                                                                    <br>
+                                                                                    <a href="/organizer/voting/{{problem['id_voting']}}" class="btn btn-xs bg-gradient-info mb-0 mt-1">Detail Voting</a>
+                                                                                    <a href="/organizer/problem/delete/{{problem['id_problem']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-1">Hapus</a>
+                                                                                    <br>
+                                                                                </td>
+                                                                            </tr>
+                                                                            {% endfor %}
+                                                                            {% endif %}
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if empty == True: %}
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Tidak ada pertanyaan dan keluhan dari Candidate/Voter</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Data Voting tidak ditemukan</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Respond -->
+    <div class="modal fade" id="modal-respond" tabindex="-1" role="dialog" aria-labelledby="modal-respond" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" id="form-respond-problem">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tanggapi Pertanyaan/Keluhan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true text-dark">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-borderless mb-0">
+                            <tr>
+                                <td class="fit py-0">
+                                    <p class="text-dark mb-0">Dari</p>
+                                </td>
+                                <td class="fit py-0">:</td>
+                                <td class="py-0">
+                                    <p class="mb-0" id="msg-from"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fit py-0">
+                                    <p class="text-dark mb-0">Sebagai</p>
+                                </td>
+                                <td class="fit py-0">:</td>
+                                <td class="py-0">
+                                    <p class="mb-0" id="msg-from-role"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fit py-0">
+                                    <p class="text-dark mb-0">ID User</p>
+                                </td>
+                                <td class="fit py-0">:</td>
+                                <td class="py-0">
+                                    <p class="mb-0" id="msg-from-id"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fit pt-0">
+                                    <p class="text-dark mb-0">Pertanyaan<br>Keluhan</p>
+                                </td>
+                                <td class="fit pt-0">:</td>
+                                <td class="text-wrap pt-0">
+                                    <p class="mb-0" id="problem-msg"></p>
+                                </td>
+                            </tr>
+                        </table>
+                        <input type="hidden" name="id_problem" value="" id="problem-id" required>
+                        <div class="form-floating mt-1">
+                            <textarea class="form-control" placeholder="Tanggapan" aria-label="Tanggapan" aria-describedby="respond-addon" name="respond" id="respond" style="height: 6rem" required></textarea>
+                            <label class="text-muted h6" for="message">Tanggapan</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn bg-gradient-secondary my-0" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" name="submit" value="respond" class="btn bg-gradient-primary my-0">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+{% include '_script.html' %}
+
+<script type="text/javascript">
+    function respond(id_v, id_p) {
+        var id_voting = id_v
+        var id_problem = id_p
+        $.ajax({
+            url: "/getdata/problem/" + id_voting + "/" + id_problem,
+            type: "GET",
+            success: function(response) {
+                var formProblem = document.querySelectorAll('#form-respond-problem')[0];
+                var id_problem = formProblem.querySelector('#problem-id');
+                var msg_from = formProblem.querySelector('#msg-from');
+                var msg_from_role = formProblem.querySelector('#msg-from-role');
+                var msg_from_id = formProblem.querySelector('#msg-from-id');
+                var problem_msg = formProblem.querySelector('#problem-msg');
+
+                id_problem.value = response['id_problem'];
+                msg_from.innerHTML = response[response['msg_from']];
+                msg_from_role.innerHTML = response['msg_from'];
+                msg_from_id.innerHTML = response['id_user'];
+                problem_msg.innerHTML = response['message'];
+            },
+            error: function(xhr) {
+                //Do Something to handle error
+            }
+        });
+    }
+
+</script>
+
+
+{% endblock %}

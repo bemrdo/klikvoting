@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% block sub_content %}
+
+<main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
+    {% include '_navbar.html' %}
+
+    <div class="container-fluid">
+        <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('{{url_for('static', filename='images/core/profile.jpg')}}'); background-position-y: 50%;">
+        </div>
+        <div class="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
+            <div class="row">
+                <div class="col-auto">
+                    <div class="avatar avatar-xl position-relative align-middle">
+                        <img src="/static/images/card_id/{{userDetail['card_id']}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm" id='card_id' type="button" onclick="card_id('{{userDetail['card_id']}}')" data-bs-toggle="modal" data-bs-target="#modal-cardid">
+                    </div>
+                </div>
+                <div class="col my-auto">
+                    <div class="h-100">
+                        <h5 class="mb-1">
+                            {{userDetail['name']}}
+                        </h5>
+                        <p class="mb-0 text-dark font-weight-bold text-sm">
+                            {{userDetail['institution']}}
+                        </p>
+                        {% if userDetail['status'] == 'approved': %}
+                        <span class="badge bg-gradient-success text-xxs">Diterima</span>
+                        {% elif userDetail['status'] == 'disproved': %}
+                        <span class="badge bg-gradient-danger text-xxs">Ditolak</span>
+                        <p class="text-sm text-secondary mb-0">{{userDetail['message']}}</p>
+                        {% elif userDetail['status'] == 'pending' %}
+                        <span class="badge bg-gradient-warning text-xxs">Menunggu Konfirmasi</span>
+                        {% elif userDetail['status'] == 'inactived' %}
+                        <span class="badge bg-gradient-danger text-xxs">Nonaktif</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-9 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+                    <div class="row">
+                        <div class="col-auto">
+                            <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Kontak</p>
+                            <p class="text-sm text-dark font-weight-bold mb-0">{{userDetail['email']}}</p>
+                            <p class="text-sm text-dark mb-0">{{userDetail['number']}}</p>
+                        </div>
+                        <div class="col">
+                            <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Alamat</p>
+                            <p class="text-sm text-dark mb-0">{{userDetail['address']}}</p>
+                        </div>
+                        <div class="col-auto">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Total Voting</p>
+                                    <p class="text-sm text-dark mb-0"><span class="font-weight-bolder">{{voting['total']}}</span> kegiatan</p>
+                                </div>
+                                <div class="col-auto">
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Voting Nonaktif</p>
+                                    <p class="text-sm text-dark mb-0"><span class="font-weight-bolder">{{voting['disactive']}}</span> kegiatan</p>
+                                </div>
+                                <div class="col-auto">
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Voting Aktif</p>
+                                    <p class="text-sm text-dark mb-0"><span class="font-weight-bolder">{{voting['active']}}</span> kegiatan</p>
+                                </div>
+                                <div class="col-auto">
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Voting Selesai</p>
+                                    <p class="text-sm text-dark mb-0"><span class="font-weight-bolder">{{voting['finish']}}</span> kegiatan</p>
+                                </div>
+                                <div class="col-auto">
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1"></p>
+                                    <a href="/admin/organizer/delete/{{userDetail['id_user']}}/" class="btn bg-gradient-danger mb-2">Hapus Akun</a>
+                                    <br>
+                                    {% if userDetail['status'] == 'inactived' %}
+                                    <a href="/admin/organizer/active/{{userDetail['id_user']}}" class="btn bg-gradient-info mb-0">Aktifkan</a>
+                                    {% elif userDetail['status'] == 'approved' %}
+                                    <a href="/admin/organizer/inactive/{{userDetail['id_user']}}" class="btn bg-gradient-warning mb-0">Nonaktifkan</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card max-height-vh-vot">
+                    <div class="card-header pb-0">
+                        <h6>Daftar Kegiatan Voting</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4 fit">No</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2 fit">ID Voting</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Nama Kegiatan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Deskripsi</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center">Tanggal Mulai</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center">Tanggal Selesai</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center">Status</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end">Opsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if userVotings != None: %}
+                                    {% for userVoting in userVotings: %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <p class="text-sm font-weight-bold mb-0">{{loop.index}}</p>
+                                        </td>
+                                        <td class="ps-2">
+                                            <p class="text-sm font-weight-bold mb-0">{{userVoting['id_voting']}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            <p class="text-sm font-weight-bold mb-0">{{userVoting['name']}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            <p class="text-sm text-secondary mb-0">{{userVoting['voting_desc']}}</p>
+                                        </td>
+                                        <td class="text-center text-sm text-secondary mb-0">
+                                            <p class="text-sm text-secondary mb-0">{{userVoting['date_start'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                        </td>
+                                        <td class="text-center text-sm text-secondary mb-0">
+                                            <p class="text-sm text-secondary mb-0">{{userVoting['date_end'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                        </td>
+                                        <td class="text-center fit">
+                                            {% if userVoting['date_start'] > now: %}
+                                            <p class="text-gradient text-warning text-sm">Nonaktif</p>
+                                            {% elif userVoting['date_end'] < now: %}
+                                            <p class="text-gradient text-dark text-sm">Selesai</p>
+                                            {% else: %}
+                                            <p class="text-gradient text-success text-sm">Aktif</p>
+                                            {% endif %}
+                                        </td>
+                                        <td class="fit pe-3 text-end">
+                                            <a href="/admin/voting/{{userVoting['id_voting']}}" class="btn btn-xs bg-gradient-secondary mb-0">Candidate & Voter</a>
+                                            <br>
+                                            <a href="/admin/voting/delete/{{userDetail['id_user']}}/{{userVoting['id_voting']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-1">Hapus</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="8">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Data Voting tidak ditemukan</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Card ID -->
+    <div class="modal fade" id="modal-cardid" tabindex="-1" role="dialog" aria-labelledby="modal-cardid" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Kartu ID</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body align-middle text-center">
+                    <img src="" class="img-fluid border-radius-lg avatar-responsive" alt="Kartu ID" id="img_cardid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+{% include '_script.html' %}
+
+<script type="text/javascript">
+    function card_id(value) {
+        var card_id = value
+        $("#img_cardid").attr('src', '/static/images/card_id/' + card_id);
+    }
+
+</script>
+
+{% endblock %}

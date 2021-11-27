@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+{% block sub_content %}
+
+<main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
+    {% include '_navbar.html' %}
+
+    <div class="container-fluid">
+        <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('{{url_for('static', filename='images/core/profile2.jpg')}}'); background-position-y: 50%;">
+        </div>
+        <div class="card card-body blur shadow-blur mx-4 mt-n55 overflow-hidden">
+            <div class="row">
+                <div class="col">
+                    <div class="h-100">
+                        <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">
+                            {{votingDetail['id_voting']}}
+                            {% if votingDetail['date_start'] > now: %}
+                            <span class="badge bg-gradient-warning text-xxs">Nonaktif</span>
+                            {% elif votingDetail['date_end'] < now: %}
+                            <span class="badge bg-gradient-dark text-xxs">Selesai</span>
+                            {% else: %}
+                            <span class="badge bg-gradient-success text-xxs">Aktif</span>
+                            {% endif %}
+                        </p>
+                        <h5 class="mb-1">
+                            {{votingDetail['name']}}
+                        </h5>
+                    </div>
+                </div>
+                <div class="col-9 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+                    <div class="row">
+                        <div class="col-auto">
+                            <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Organizer</p>
+                            <p class="text-sm text-dark font-weight-bold mb-0">{{votingDetail['organizer']}}</p>
+                        </div>
+                        <div class="col">
+                            <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Deskripsi Kegiatan</p>
+                            <p class="text-sm text-dark mb-0">{{votingDetail['voting_desc']}}</p>
+                        </div>
+                        <div class="col-auto">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Akses Viewer</p>
+                                    <p class="text-sm text-dark mb-0">{{'Diijinkan' if votingDetail['viewer'] == 'on' else 'Tidak diijinkan'}}</p>
+                                </div>
+                                <div class="col-auto text-center">
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Mulai - Selesai</p>
+                                    <p class="text-sm text-dark mb-0">{{votingDetail['date_start'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                    <p class="text-sm text-dark mb-0">{{votingDetail['date_end'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                </div>
+                                <div class="col-auto">
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1"></p>
+                                    <a href="/admin/voting/report/{{votingDetail['id_voting']}}/" class="btn bg-gradient-info mb-0 me-1">Hasil Voting</a>
+                                    <a href="/admin/voting/delete/{{votingDetail['id_voting']}}/" class="btn bg-gradient-danger mb-0">Hapus Voting</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-6">
+                <div class="card max-height-vh-vot">
+                    <div class="card-header pb-0">
+                        <div class="row">
+                            <div class="col">
+                                <h6>Daftar Candidate</h6>
+                            </div>
+                            <div class="col">
+                                <h6 class="text-end">Total: {{total['candidate']}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4 fit">No</th>
+                                        {% if data['cavatar']: %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center px-2 fit">Foto</th>
+                                        {% endif %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2 fit">ID</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Nama</th>
+                                        {% if data['cdesc']: %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center fit">Status</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder fit">Deskripsi</th>
+                                        {% endif %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end fit">Opsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if votingCandidates != None: %}
+                                    {% for votingCandidate in votingCandidates: %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <p class="text-sm font-weight-bold mb-0">{{loop.index}}</p>
+                                        </td>
+                                        {% if data['cavatar']: %}
+                                        <td class="text-center">
+                                            <div class="px-0 py-1">
+                                                <img src="/static/images/candidate/{{votingCandidate['avatar']}}" class="avatar-cardid" id='avatar' type="button" onclick="candidate('{{votingCandidate['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
+                                            </div>
+                                        </td>
+                                        {% endif %}
+                                        <td class="ps-2">
+                                            <p class="text-sm font-weight-bold mb-0">{{votingCandidate['id_candidate']}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            <p class="text-sm font-weight-bold mb-0">{{votingCandidate['name']}}</p>
+                                        </td>
+                                        <td class="text-center">
+                                            {% if votingCandidate['status'] == 'blocked': %}
+                                            <p class="text-gradient text-danger text-sm mb-0 mt-05">Tidak Diijinkan</p>
+                                            {% elif votingCandidate['status'] == None: %}
+                                            <p class="text-gradient text-secondary text-sm mb-0 mt-05">Belum Vote</p>
+                                            {% else: %}
+                                            <p class="text-gradient text-success text-sm mb-0 mt-05">Sudah Vote</p>
+                                            {% endif %}
+                                        </td>
+                                        {% if data['cdesc']: %}
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-xs bg-gradient-primary" onclick="preview('{{votingCandidate['description']}}')" data-bs-toggle="modal" data-bs-target="#modal-preview">Deskripsi</button>
+                                        </td>
+                                        {% endif %}
+                                        <td class="pe-3">
+                                            <a href="/admin/voting/{{votingCandidate['id_voting']}}/candidate/delete/{{votingCandidate['id_candidate']}}" class="btn btn-xs bg-gradient-danger mb-0">Hapus</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="7">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Data Candidate tidak ditemukan</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card max-height-vh-vot">
+                    <div class="card-header pb-0">
+                        <div class="row">
+                            <div class="col">
+                                <h6>Daftar Voter</h6>
+                            </div>
+                            <div class="col">
+                                <h6 class="text-end">Total: {{total['voter']}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4 fit">No</th>
+                                        {% if data['vavatar']: %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center px-2 fit">Foto</th>
+                                        {% endif %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2 fit">ID</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Nama</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center fit">Status</th>
+                                        {% if data['vdesc']: %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center fit">Deskripsi</th>
+                                        {% endif %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end fit">Opsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if votingVoters != None: %}
+                                    {% for votingVoter in votingVoters: %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <p class="text-sm font-weight-bold mb-0">{{loop.index}}</p>
+                                        </td>
+                                        {% if data['vavatar']: %}
+                                        <td class="text-center">
+                                            <div class="px-o py-1">
+                                                <img src="/static/images/voter/{{votingVoter['avatar']}}" class="avatar-cardid" id='avatar' type="button" onclick="voter('{{votingVoter['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
+                                            </div>
+                                        </td>
+                                        {% endif %}
+                                        <td class="fit ps-2">
+                                            <p class="text-sm font-weight-bold mb-0">{{votingVoter['id_voter']}}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-sm font-weight-bold mb-0">{{votingVoter['name']}}</p>
+                                        </td>
+                                        <td class="text-center">
+                                            {% if votingVoter['status'] == 'blocked': %}
+                                            <p class="text-gradient text-danger text-sm mb-0 mt-05">Tidak Diijinkan</p>
+                                            {% elif votingVoter['status'] == None: %}
+                                            <p class="text-gradient text-secondary text-sm mb-0 mt-05">Belum Vote</p>
+                                            {% else: %}
+                                            <p class="text-gradient text-success text-sm mb-0 mt-05">Sudah Vote</p>
+                                            {% endif %}
+                                        </td>
+                                        {% if data['vdesc']: %}
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-xs bg-gradient-primary mb-0" onclick="preview('{{votingVoter['description']}}')" data-bs-toggle="modal" data-bs-target="#modal-preview">Deskripsi</button>
+                                        </td>
+                                        {% endif %}
+                                        <td class="pe-3">
+                                            <a href="/admin/voting/{{votingVoter['id_voting']}}/voter/delete/{{votingVoter['id_voter']}}" class="btn btn-xs bg-gradient-danger mb-0">Hapus</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="7">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Data Voter tidak ditemukan</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Card ID -->
+    <div class="modal fade" id="modal-avatar" tabindex="-1" role="dialog" aria-labelledby="modal-cardid" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Foto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body align-middle text-center">
+                    <img src="" class="img-fluid border-radius-lg avatar-responsive" alt="Avatar" id="img_avatar">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Deskripsi -->
+    <div class="modal fade" id="modal-preview" tabindex="-1" role="dialog" aria-labelledby="modal-preview" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                    <h5 class="modal-title mx-auto">Deskripsi</h5>
+                </div>
+                <div class="modal-body align-middle ql-editor" id="preview-body">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</main>
+
+{% include '_script.html' %}
+
+<script type="text/javascript">
+    function candidate(value) {
+        var avatar = value
+        $("#img_avatar").attr('src', '/static/images/candidate/' + avatar);
+    }
+
+    function voter(value) {
+        var avatar = value
+        $("#img_avatar").attr('src', '/static/images/voter/' + avatar);
+    }
+
+    function preview(value) {
+        $('#preview-body').html(value)
+
+    }
+</script>
+
+{% endblock %}

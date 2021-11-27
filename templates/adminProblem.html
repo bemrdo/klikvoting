@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% block sub_content %}
+
+<main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
+    {% include '_navbar.html' %}
+
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card max-height-vh-table">
+                    <div class="card-header pb-0">
+                        <h6>Daftar Pertanyaan dan Keluhan Organizer</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4">No</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Nama Organizer</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Nama Kegiatan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Pertanyaan/Keluhan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Tanggapan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end">Opsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if organizerProblems != None: %}
+                                    {% for organizerProblem in organizerProblems: %}
+                                    <tr>
+                                        <td class="ps-4 fit">
+                                            <p class="text-sm font-weight-bold mb-0">{{loop.index}}</p>
+                                        </td>
+                                        <td class="fit">
+                                            <p class="text-sm font-weight-bold mb-0">{{organizerProblem['organizer']}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            <p class="text-sm font-weight-bold mb-0">{{organizerProblem['voting']}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            <p class="text-sm mb-0">{{organizerProblem['message']}}</p>
+                                            <p class="text-xxs text-secondary pt-2 mb-0">{{organizerProblem['msg_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            {% if organizerProblem['respond'] != None: %}
+                                            <p class="text-sm mb-0">{{organizerProblem['respond']}}</p>
+                                            <p class="text-xxs text-secondary pt-2 mb-0">{{organizerProblem['rsp_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                            {% endif %}
+                                        </td>
+                                        <td class="fit pe-3 text-end">
+                                            {% if organizerProblem['respond'] != None: %}
+                                            <button type="button" class="btn btn-xs bg-gradient-secondary mb-0 full-block" onclick="respond('{{organizerProblem['id_problem']}}')" data-bs-toggle="modal" data-bs-target="#modal-respond">Edit Tanggapan</button>
+                                            {% else: %}
+                                            <button type="button" class="btn btn-xs bg-gradient-dark mb-0" onclick="respond('{{organizerProblem['id_problem']}}')" data-bs-toggle="modal" data-bs-target="#modal-respond">Berikan Tanggapan</button>
+                                            {% endif %}
+                                            <br>
+                                            <a href="/admin/voting/{{organizerProblem['id_voting']}}" class="btn btn-xs bg-gradient-info mb-0 mt-1">Detail Voting</a>
+                                            <a href="/admin/problem/delete/{{organizerProblem['id_problem']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-1">Hapus</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Tidak ada pertanyaan dan keluhan dari Organizer</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Respond -->
+    <div class="modal fade" id="modal-respond" tabindex="-1" role="dialog" aria-labelledby="modal-respond" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" id="form-respond-problem">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tanggapi Pertanyaan/Keluhan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true text-dark">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-borderless mb-0">
+                            <tr>
+                                <td class="fit py-0">
+                                    <p class="text-dark mb-0">Dari</p>
+                                </td>
+                                <td class="fit py-0">:</td>
+                                <td class="py-0">
+                                    <p class="mb-0" id="msg-from"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fit py-0">
+                                    <p class="text-dark mb-0">ID User</p>
+                                </td>
+                                <td class="fit py-0">:</td>
+                                <td class="py-0">
+                                    <p class="mb-0" id="msg-from-id"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fit pt-0">
+                                    <p class="text-dark mb-0">Pertanyaan<br>Keluhan</p>
+                                </td>
+                                <td class="fit pt-0">:</td>
+                                <td class="text-wrap pt-0">
+                                    <p class="mb-0" id="problem-msg"></p>
+                                </td>
+                            </tr>
+                        </table>
+                        <input type="hidden" name="id_problem" value="" id="problem-id" required>
+                        <div class="form-floating mt-1">
+                            <textarea class="form-control" placeholder="Tanggapan" aria-label="Tanggapan" aria-describedby="respond-addon" name="respond" id="respond" style="height: 6rem" required></textarea>
+                            <label class="text-muted h6" for="message">Tanggapan</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn bg-gradient-secondary my-0" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" name="submit" value="respond" class="btn bg-gradient-primary my-0">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% include '_script.html' %}
+
+<script type="text/javascript">
+    function respond(e) {
+        var id_problem = e
+        $.ajax({
+            url: "/getdata/problem/" + id_problem,
+            type: "GET",
+            success: function(response) {
+                var formProblem = document.querySelectorAll('#form-respond-problem')[0];
+                var id_problem = formProblem.querySelector('#problem-id');
+                var msg_from = formProblem.querySelector('#msg-from');
+                var msg_from_id = formProblem.querySelector('#msg-from-id');
+                var problem_msg = formProblem.querySelector('#problem-msg');
+
+                id_problem.value = response['id_problem'];
+                msg_from.innerHTML = response['name'];
+                msg_from_id.innerHTML = response['id_user'];
+                problem_msg.innerHTML = response['message'];
+            },
+            error: function(xhr) {
+                //Do Something to handle error
+            }
+        });
+    }
+
+</script>
+
+{% endblock %}

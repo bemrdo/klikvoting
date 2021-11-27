@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block sub_content %}
+
+<main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
+    {% include '_navbar.html' %}
+
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card max-height-vh-table">
+                    <div class="card-header pb-0">
+                        <h6>Daftar Organizer</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder fit">No</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder">Kartu Id</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder">Organizer</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Kontak</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Alamat</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center">Status</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Keterangan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end">Opsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if organizers != None: %}
+                                    {% for organizer in organizers: %}
+                                    <tr>
+                                        <td>
+                                            <p class="text-sm text-secondary mb-0 text-center">{{loop.index}}</p>
+                                        </td>
+                                        <td class="fit align-middle text-center">
+                                            <div class="px-2 py-1">
+                                                <img src="/static/images/card_id/{{organizer['card_id']}}" class="avatar-cardid" id='card_id' type="button" onclick="card_id('{{organizer['card_id']}}')" data-bs-toggle="modal" data-bs-target="#modal-cardid">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <h6 class="mb-0">{{organizer['name']}}</h6>
+                                            <p class="text-sm text-secondary mb-0">{{organizer['institution']}}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-sm font-weight-bold mb-0">{{organizer['email']}}</p>
+                                            <p class="text-sm text-secondary mb-0">{{organizer['number']}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            <p class="text-sm text-secondary mb-0">{{organizer['address']}}</p>
+                                        </td>
+                                        <td class="text-center">
+                                            {% if organizer['status'] == 'approved': %}
+                                            <p class="text-gradient text-success text-sm">Diterima</p>
+                                            {% elif organizer['status'] == 'disproved': %}
+                                            <p class="text-gradient text-danger text-sm">Ditolak</p>
+                                            {% elif organizer['status'] == 'pending': %}
+                                            <p class="text-gradient text-warning text-sm">Menunggu Konfirmasi</p>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-wrap">
+                                            {% if organizer['status'] == 'inactived' %}
+                                            <p class="text-sm text-secondary mb-1">[Nonaktif]</p>
+                                            <a href="/admin/organizer/active/{{organizer['id_user']}}" class="btn btn-xs bg-gradient-info mb-0">Aktifkan</a>
+                                            {% elif organizer['status'] == 'approved' %}
+                                            <p class="text-sm text-secondary mb-1">[Aktif]</p>
+                                            <a href="/admin/organizer/inactive/{{organizer['id_user']}}" class="btn btn-xs bg-gradient-warning mb-0">Nonaktifkan</a>
+                                            {% elif organizer['status'] == 'disproved' %}
+                                            <p class="text-sm text-secondary mb-1">{{organizer['message']}}</p>
+                                            <a href="/admin/organizer/approve/{{organizer['id_user']}}" class="btn btn-xs bg-gradient-success mb-0">Terima</a>
+                                            {% elif organizer['status'] == 'pending' %}
+                                            <p class="text-sm text-secondary mb-1">{{organizer['message']}}</p>
+                                            <a href="/admin/organizer/approve/{{organizer['id_user']}}" class="btn btn-xs bg-gradient-success mb-0">Terima</a>
+                                            <button type="button" onclick="reject(this)" value="{{organizer['id_user']}};{{organizer['name']}}" class="btn btn-xs bg-gradient-danger mt-1" data-bs-toggle="modal" data-bs-target="#modal-reject">Tolak</button>
+                                            {% endif %}
+                                        </td>
+                                        <td class="fit pe-3 text-end">
+                                            <a href="/admin/organizer/{{organizer['id_user']}}" class="btn btn-xs bg-gradient-secondary mb-0">Profil</a>
+                                            <br>
+                                            <a href="/admin/organizer/delete/{{organizer['id_user']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-1">Hapus</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="8">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Data Organizer tidak ditemukan</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Card ID -->
+    <div class="modal fade" id="modal-cardid" tabindex="-1" role="dialog" aria-labelledby="modal-cardid" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Kartu ID</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body align-middle text-center">
+                    <img src="" class="img-fluid border-radius-lg avatar-responsive" alt="Kartu ID" id="img_cardid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Reject Message -->
+    <div class="modal fade" id="modal-reject" tabindex="-1" role="dialog" aria-labelledby="modal-reject" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Penolakan Akun</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="ID User" aria-label="ID User" aria-describedby="id-user-addon" name="id_user" id="id-user" required readonly>
+                            <label class="text-muted h6" for="id-user">ID Organizer</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="Nama" aria-label="Nama" aria-describedby="name-addon" name="name" id="name-user" required readonly>
+                            <label class="text-muted h6" for="name" required readonly>Nama Organizer</label>
+                        </div>
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Alasan penolakan" aria-label="Alasan penolakan" aria-describedby="message-addon" name="message" id="message" style="height: 6rem" required></textarea>
+                            <label class="text-muted h6" for="message">Alasan penolakan</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn bg-gradient-secondary my-0" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" name="submit" value="reject-message" class="btn bg-gradient-primary my-0">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+{% include '_script.html' %}
+
+<script type="text/javascript">
+    function reject(e) {
+        var data = e.value.split(';')
+        var id_user = data[0]
+        var name = data[1]
+
+        var seg = document.querySelectorAll('#modal-reject')[0]
+        var id_user_ = seg.querySelector('#id-user')
+        var name_ = seg.querySelector('#name-user')
+        id_user_.value = id_user
+        name_.value = name
+    }
+
+    function card_id(value) {
+        var card_id = value
+        $("#img_cardid").attr('src', '/static/images/card_id/' + card_id);
+    }
+
+</script>
+
+{% endblock %}

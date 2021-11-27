@@ -1,0 +1,1080 @@
+{% extends 'base.html' %}
+{% block sub_content %}
+
+<main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
+    {% include '_navbar.html' %}
+
+    <div class="container-fluid">
+        <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('{{url_for('static', filename='images/core/profile2.jpg')}}'); background-position-y: 50%;">
+        </div>
+        <div class="card card-body blur shadow-blur mx-4 mt-n95 overflow-hidden">
+            <div class="row min-height-100">
+                <div class="col my-sm-auto">
+                    <div>
+                        <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">
+                            {{votingDetail['id_voting']}}
+                            {% if votingDetail['date_start'] > now: %}
+                            <span class="badge bg-gradient-warning text-xxs">Nonaktif</span>
+                            {% elif votingDetail['date_end'] < now: %}
+                            <span class="badge bg-gradient-dark text-xxs">Selesai</span>
+                            {% else: %}
+                            <span class="badge bg-gradient-success text-xxs">Aktif</span>
+                            {% endif %}
+                        </p>
+                        <h5 class="mb-1">
+                            {{votingDetail['name']}}
+                        </h5>
+                    </div>
+                </div>
+                <div class="col-8 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+                    <div class="row">
+                        <div class="col">
+                            <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Deskripsi Kegiatan</p>
+                            <p class="text-sm text-dark mb-0">{{votingDetail['voting_desc']}}</p>
+                        </div>
+                        <div class="col-auto">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Akses Viewer</p>
+                                    <p class="text-sm text-dark mb-0">{{'Diijinkan' if votingDetail['viewer'] == 'on' else 'Tidak diijinkan'}}</p>
+                                </div>
+                                <div class="col-auto text-center">
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Mulai - Selesai</p>
+                                    <p class="text-sm text-dark mb-0">{{votingDetail['date_start'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                    <p class="text-sm text-dark mb-0">{{votingDetail['date_end'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                </div>
+                                <div class="col-auto text-end">
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1"></p>
+                                    <a href="/organizer/voting/report/{{votingDetail['id_voting']}}/" class="btn bg-gradient-info mb-0 me-1">Hasil Voting</a>
+                                    <a href="/organizer/voting/delete/{{votingDetail['id_voting']}}/" class="btn bg-gradient-danger mb-0">Hapus Voting</a>
+                                    <br>
+                                    <button type="button" class="btn bg-gradient-secondary mb-0 mt-2" data-bs-toggle="modal" data-bs-target="#edit-voting" onclick="edit('{{votingDetail['id_voting']}}')">Edit Voting</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-auto">
+                <div class="card card-body blur shadow-blur ms-4 mt-2">
+                    <div class="row">
+                        <div class="col-auto pe-1">
+                            <button type="button" class="btn bg-gradient-info mb-0" data-bs-toggle="modal" data-bs-target="#tell-problem">Sampaikan Pertanyaan/Keluhan</button>
+                        </div>
+                        <div class="col-auto px-1">
+                            <button type="button" class="btn bg-gradient-dark mb-0" data-bs-toggle="modal" data-bs-target="#add-candidate">Tambah Candidate</button>
+                        </div>
+                        <div class="col-auto ps-1">
+                            <button type="button" class="btn bg-gradient-dark mb-0" data-bs-toggle="modal" data-bs-target="#add-voter">Tambah Voter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col ps-0">
+                <div class="card card-body blur shadow-blur me-4 mt-2">
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group bg-white" id="group-link">
+                                <span class="input-group-text text-uppercase text-gradient text-secondary text-sm font-weight-bolder" id="title-link">LINK VOTING :</span>
+                                <input type="text" id="voting-link" class="form-control form-control-alternative bg-white" aria-label="Link Group" aria-describedby="title-link" value="{{request.host_url + 'voting-page/login/' + votingDetail['id_voting']}}" disabled readonly>
+                            </div>
+                        </div>
+                        <div class="col-auto ps-1 pe-25">
+                            <button type="button" class="btn bg-gradient-success mb-0" onclick="btnLink('{{request.host_url + 'voting-page/login/' + votingDetail['id_voting']}}')">Salin Link Voting</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid pt-4">
+        <div class="row">
+            <div class="col">
+                <div class="card max-height-vh-table">
+                    <div class="card-header pb-0">
+                        <h6>Pertanyaan dan Keluhan Organizer</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4">No</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Pertanyaan/Keluhan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Tanggapan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end">Opsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if userProblems != None: %}
+                                    {% for problem in userProblems: %}
+                                    <tr>
+                                        <td class="ps-4 fit">
+                                            <p class="text-sm font-weight-bold mb-0">{{loop.index}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            <p class="text-sm mb-0">{{problem['message']}}</p>
+                                            <p class="text-xxs text-secondary pt-2 mb-0">{{problem['msg_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            {% if problem['respond'] != None: %}
+                                            <p class="text-sm mb-0">{{problem['respond']}}</p>
+                                            <p class="text-xxs text-secondary pt-2 mb-0">{{problem['rsp_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                            {% endif %}
+                                        </td>
+                                        <td class="fit pe-3">
+                                            <a href="/organizer/voting/{{problem['id_voting']}}/problem/delete/{{problem['id_problem']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-1">Hapus</a>
+                                            <br>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="4">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Tidak ada pertanyaan dan keluhan dari Organizer</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card max-height-vh-table">
+                    <div class="card-header pb-0">
+                        <h6>Daftar Pertanyaan dan Keluhan Candidate/Voter</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4">No</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Nama User</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Pertanyaan/Keluhan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Tanggapan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end">Opsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if problems_cv != None: %}
+                                    {% for problem in problems_cv: %}
+                                    <tr>
+                                        <td class="ps-4 fit">
+                                            <p class="text-sm font-weight-bold mb-0">{{loop.index}}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-sm font-weight-bold mb-0">{{problem[problem['msg_from']]}}</p>
+                                            <p class="text-xxs text-secondary pt-2 mb-0">{{problem['msg_from']}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            <p class="text-sm mb-0">{{problem['message']}}</p>
+                                            <p class="text-xxs text-secondary pt-2 mb-0">{{problem['msg_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            {% if problem['respond'] != None: %}
+                                            <p class="text-sm mb-0">{{problem['respond']}}</p>
+                                            <p class="text-xxs text-secondary pt-2 mb-0">{{problem['rsp_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                            {% endif %}
+                                        </td>
+                                        <td class="fit pe-3 text-end">
+                                            {% if problem['respond'] != None: %}
+                                            <button type="button" class="btn btn-xs bg-gradient-secondary mb-0" onclick="respond('{{votingDetail['id_voting']}}','{{problem['id_problem']}}')" data-bs-toggle="modal" data-bs-target="#modal-respond">Edit Tanggapan</button>
+                                            {% else: %}
+                                            <button type="button" class="btn btn-xs bg-gradient-dark mb-0" onclick="respond('{{votingDetail['id_voting']}}','{{problem['id_problem']}}')" data-bs-toggle="modal" data-bs-target="#modal-respond">Berikan Tanggapan</button>
+                                            {% endif %}
+                                            <br>
+                                            <a href="/organizer/voting/{{problem['id_voting']}}/problem/delete/{{problem['id_problem']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-1">Hapus</a>
+                                            <br>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Tidak ada pertanyaan dan keluhan dari Candidate/Voter</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col">
+                <div class="card max-height-vh-vot">
+                    <div class="card-header pb-0">
+                        <div class="row">
+                            <div class="col">
+                                <h6>Daftar Candidate</h6>
+                            </div>
+                            <div class="col">
+                                <h6 class="text-end">Total: {{total['candidate']}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4 fit">No</th>
+                                        {% if data['cavatar']: %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center px-2 fit">Foto</th>
+                                        {% endif %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2 fit">ID</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Nama</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center fit">Status</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center fit">Tampilkan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end fit">Opsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if votingCandidates != None: %}
+                                    {% for votingCandidate in votingCandidates: %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <p class="text-sm font-weight-bold mb-0">{{loop.index}}</p>
+                                        </td>
+                                        {% if data['cavatar']: %}
+                                        <td class="text-center">
+                                            <div class="px-0 py-1">
+                                                <img src="/static/images/candidate/{{votingCandidate['avatar']}}" class="avatar-cardid" id='avatar' type="button" onclick="candidate('{{votingCandidate['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
+                                            </div>
+                                        </td>
+                                        {% endif %}
+                                        <td class="ps-2">
+                                            <p class="text-sm font-weight-bold mb-0">{{votingCandidate['id_candidate']}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            <p class="text-sm font-weight-bold mb-0">{{votingCandidate['name']}}</p>
+                                        </td>
+                                        <td class="text-center">
+                                            {% if votingCandidate['status'] == 'blocked': %}
+                                            <p class="text-gradient text-danger text-sm mb-0 mt-05">Tidak Diijinkan</p>
+                                            <a href="/organizer/voting/{{votingCandidate['id_voting']}}/candidate/allow/{{votingCandidate['id_candidate']}}" class="btn btn-xs bg-gradient-success mb-0 mt-2">Aktifkan<br>Hak Pilih</a>
+                                            {% elif votingCandidate['status'] == None: %}
+                                            <p class="text-gradient text-secondary text-sm mb-0 mt-05">Belum Vote</p>
+                                            <a href="/organizer/voting/{{votingCandidate['id_voting']}}/candidate/block/{{votingCandidate['id_candidate']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-2">Nonaktifkan<br>Hak Pilih</a>
+                                            {% else: %}
+                                            <p class="text-gradient text-success text-sm mb-0 mt-05">Sudah Vote</p>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            {% if data['cdesc']: %}
+                                            <button type="button" class="btn btn-xs bg-gradient-primary mb-1" onclick="preview('{{votingCandidate['description']}}')" data-bs-toggle="modal" data-bs-target="#modal-preview">Deskripsi</button>
+                                            <br>
+                                            {% endif %}
+                                            <button type="button" class="btn btn-xs bg-gradient-warning mb-0" onclick="credential('{{votingCandidate['username']}}', '{{votingCandidate['pass']}}')" data-bs-toggle="modal" data-bs-target="#modal-credential">Data Login</button>
+                                        </td>
+                                        <td class="pe-3 text-end">
+                                            <button type="button" class="btn btn-xs bg-gradient-secondary mb-0" onclick="editCandidate('{{votingCandidate['id_candidate']}}')" data-bs-toggle="modal" data-bs-target="#edit-candidate">Edit</button>
+                                            <br>
+                                            <a href="/organizer/voting/{{votingCandidate['id_voting']}}/candidate/delete/{{votingCandidate['id_candidate']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-1">Hapus</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="7">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Data Candidate tidak ditemukan</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card max-height-vh-vot">
+                    <div class="card-header pb-0">
+                        <div class="row">
+                            <div class="col">
+                                <h6>Daftar Voter</h6>
+                            </div>
+                            <div class="col">
+                                <h6 class="text-end">Total: {{total['voter']}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4 fit">No</th>
+                                        {% if data['vavatar']: %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center px-2 fit">Foto</th>
+                                        {% endif %}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">ID</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Nama</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center fit">Status</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center fit">Tampilkan</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end fit">Opsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if votingVoters != None: %}
+                                    {% for votingVoter in votingVoters: %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <p class="text-sm font-weight-bold mb-0">{{loop.index}}</p>
+                                        </td>
+                                        {% if data['vavatar']: %}
+                                        <td class="text-center">
+                                            <div class="px-o py-1">
+                                                <img src="/static/images/voter/{{votingVoter['avatar']}}" class="avatar-cardid" id='avatar' type="button" onclick="voter('{{votingVoter['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
+                                            </div>
+                                        </td>
+                                        {% endif %}
+                                        <td class="fit ps-2">
+                                            <p class="text-sm font-weight-bold mb-0">{{votingVoter['id_voter']}}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-sm font-weight-bold mb-0">{{votingVoter['name']}}</p>
+                                        </td>
+                                        <td class="text-center">
+                                            {% if votingVoter['status'] == 'blocked': %}
+                                            <p class="text-gradient text-danger text-sm mb-0 mt-05">Tidak Diijinkan</p>
+                                            <a href="/organizer/voting/{{votingVoter['id_voting']}}/voter/allow/{{votingVoter['id_voter']}}" class="btn btn-xs bg-gradient-success mb-0 mt-2">Aktifkan<br>Hak Pilih</a>
+                                            {% elif votingVoter['status'] == None: %}
+                                            <p class="text-gradient text-secondary text-sm mb-0 mt-05">Belum Vote</p>
+                                            <a href="/organizer/voting/{{votingVoter['id_voting']}}/voter/block/{{votingVoter['id_voter']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-2">Nonaktifkan<br>Hak Pilih</a>
+                                            {% else: %}
+                                            <p class="text-gradient text-success text-sm mb-0 mt-05">Sudah Vote</p>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            {% if data['vdesc']: %}
+                                            <button type="button" class="btn btn-xs bg-gradient-primary mb-1" onclick="preview('{{votingVoter['description']}}')" data-bs-toggle="modal" data-bs-target="#modal-preview">Deskripsi</button>
+                                            <br>
+                                            {% endif %}
+                                            <button type="button" class="btn btn-xs bg-gradient-warning mb-0" onclick="credential('{{votingVoter['username']}}', '{{votingVoter['pass']}}')" data-bs-toggle="modal" data-bs-target="#modal-credential">Data Login</button>
+                                        </td>
+                                        <td class="pe-3 text-end">
+                                            <button type="button" class="btn btn-xs bg-gradient-secondary mb-0" onclick="editVoter('{{votingVoter['id_voter']}}')" data-bs-toggle="modal" data-bs-target="#edit-voter">Edit</button>
+                                            <br>
+                                            <a href="/organizer/voting/{{votingVoter['id_voting']}}/voter/delete/{{votingVoter['id_voter']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-1">Hapus</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="7">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Data Voter tidak ditemukan</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Card ID -->
+    <div class="modal fade" id="modal-avatar" tabindex="-1" role="dialog" aria-labelledby="modal-avatar" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Foto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body align-middle text-center">
+                    <img src="" class="img-fluid border-radius-lg avatar-responsive" alt="Avatar" id="img_avatar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Voting -->
+    <div class="modal fade" id="edit-voting" tabindex="-1" role="dialog" aria-labelledby="edit-voting" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" id="form-edit-voting">
+                    <div class="modal-header">
+                        <h5 class="modal-title font-weight-bolder text-gradient text-primary">Edit Voting</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body align-middle">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="Nama Kegiatan" aria-label="Nama Kegiatan" aria-describedby="name-addon" name="name" id="voting-name" required>
+                            <label class="text-muted h6" for="voting-name">Nama Kegiatan</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" placeholder="Deskripsi Kegiatan" aria-label="Deskripsi Kegiatan" aria-describedby="voting-desc-addon" name="voting_desc" id="voting-desc" style="height: 6rem" required></textarea>
+                            <label class="text-muted h6" for="voting-desc">Deskripsi Kegiatan</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="Rentang Pelaksanaan Kegiatan" aria-label="Rentang Pelaksanaan Kegiatan" aria-describedby="datetimes-addon" name="datetimes" id="datetimes" required>
+                            <label class="text-muted h6" for="datetimes">Rentang Pelaksanaan Kegiatan</label>
+                        </div>
+                        <label for="check-candidate" class="form-label h6 text-gradient text-primary">Kelengkapan data Candidate</label>
+                        <div class="form-check" id="check-candidate">
+                            <input class="form-check-input" type="checkbox" id="candidate-name" checked disabled>
+                            <input type="hidden" value="cname" name="candidate">
+                            <label class="form-check-label" for="candidate-name">Nama Lengkap</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="cdesc" name="candidate" id="candidate-desc" checked>
+                            <label class="form-check-label" for="candidate-desc">Deskripsi dan Informasi Lainnya</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="cavatar" name="candidate" id="candidate-avatar" checked>
+                            <label class="form-check-label" for="candidate-avatar">Foto/Gambar Candidate</label>
+                        </div>
+                        <label for="check-voter" class="form-label h6 text-gradient text-primary">Kelengkapan data Voter</label>
+                        <div class="form-check" id="check-voter">
+                            <input class="form-check-input" type="checkbox" id="voter-name" checked disabled>
+                            <input type="hidden" value="vname" name="voter">
+                            <label class="form-check-label" for="voter-name">Nama Lengkap</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="vdesc" name="voter" id="voter-desc" checked>
+                            <label class="form-check-label" for="voter-desc">Deskripsi dan Informasi Lainnya</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="vavatar" name="voter" id="voter-avatar">
+                            <label class="form-check-label" for="voter-avatar">Foto/Gambar Voter</label>
+                        </div>
+                        <label for="switch-viewer" class="form-label h6 text-gradient text-primary">Melihat Live Count tanpa akun?</label>
+                        <div class="form-check form-switch" id="switch-viewer">
+                            <input class="form-check-input" type="checkbox" name="viewer_access" id="viewer-access">
+                            <label class="form-check-label" for="viewer-access">Berikan Akses Viewer</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn bg-gradient-secondary my-0" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" name="submit" value="edit-voting" class="btn bg-gradient-primary my-0">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tell Problem -->
+    <div class="modal fade" id="tell-problem" tabindex="-1" role="dialog" aria-labelledby="modal-respond" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Sampaikan Pertanyaan/Keluhan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true text-dark">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-dark mb-2">Kepada : Admin</p>
+                        <div class="form-floating mt-1">
+                            <textarea class="form-control" placeholder="Pertanyaan dan Keluhan" aria-label="Pertanyaan dan Keluhan" aria-describedby="problem-addon" name="problem" style="height: 6rem" required></textarea>
+                            <label class="text-muted h6" for="message">Deskripsi pertanyaan/keluhan</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn bg-gradient-secondary my-0" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" name="submit" value="tell-problem" class="btn bg-gradient-primary my-0">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Respond -->
+    <div class="modal fade" id="modal-respond" tabindex="-1" role="dialog" aria-labelledby="modal-respond" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" id="form-respond-problem">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tanggapi Pertanyaan/Keluhan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true text-dark">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-borderless mb-0">
+                            <tr>
+                                <td class="fit py-0">
+                                    <p class="text-dark mb-0">Dari</p>
+                                </td>
+                                <td class="fit py-0">:</td>
+                                <td class="py-0">
+                                    <p class="mb-0" id="msg-from"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fit py-0">
+                                    <p class="text-dark mb-0">Sebagai</p>
+                                </td>
+                                <td class="fit py-0">:</td>
+                                <td class="py-0">
+                                    <p class="mb-0" id="msg-from-role"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fit py-0">
+                                    <p class="text-dark mb-0">ID User</p>
+                                </td>
+                                <td class="fit py-0">:</td>
+                                <td class="py-0">
+                                    <p class="mb-0" id="msg-from-id"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fit pt-0">
+                                    <p class="text-dark mb-0">Pertanyaan<br>Keluhan</p>
+                                </td>
+                                <td class="fit pt-0">:</td>
+                                <td class="text-wrap pt-0">
+                                    <p class="mb-0" id="problem-msg"></p>
+                                </td>
+                            </tr>
+                        </table>
+                        <input type="hidden" name="id_problem" value="" id="problem-id" required>
+                        <div class="form-floating mt-1">
+                            <textarea class="form-control" placeholder="Tanggapan" aria-label="Tanggapan" aria-describedby="respond-addon" name="respond" id="respond" style="height: 6rem" required></textarea>
+                            <label class="text-muted h6" for="message">Tanggapan</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn bg-gradient-secondary my-0" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" name="submit" value="respond" class="btn bg-gradient-primary my-0">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Add Candidate -->
+    <div class="modal fade" id="add-candidate" tabindex="-1" role="dialog" aria-labelledby="add-candidate" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" id="form-add-candidate" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tambah Data Candidate</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true text-dark">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <input type="text" id="candidate-name" class="form-control" placeholder="Nama" aria-label="Nama" aria-describedby="name-addon" name="name" required>
+                            <label class="text-muted h6" for="candidate-name">Nama</label>
+                        </div>
+                        {% if data['cdesc'] == True: %}
+                        <label class="text-gradient text-primary h6" for="editor">Deskripsi Candidate</label>
+                        <div id="editor"></div>
+                        {% endif %}
+                        {% if data['cavatar'] == True: %}
+                        <div class="row mt-3">
+                            <div class="col-auto">
+                                <label class="text-gradient text-primary h6 pt-25" for="avatarInput">Foto Candidate</label>
+                            </div>
+                            <div class="col">
+                                <input type="file" class="form-control form-control-lg" placeholder="Avatar" aria-label="Avatar" aria-describedby="avatar-addon" name="cavatar" id="avatarInput" required>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn bg-gradient-secondary my-0" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" name="submit" value="add-candidate" class="btn bg-gradient-primary my-0">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Add Voter -->
+    <div class="modal fade" id="add-voter" tabindex="-1" role="dialog" aria-labelledby="add-voter" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" id="form-add-voter" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tambah Data Voter</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true text-dark">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <input type="text" id="voter-name" class="form-control" placeholder="Nama" aria-label="Nama" aria-describedby="name-addon" name="name" required>
+                            <label class="text-muted h6" for="voter-name">Nama</label>
+                        </div>
+                        {% if data['vdesc'] == True: %}
+                        <div class="form-floating mt-1">
+                            <textarea class="form-control" placeholder="Deskripsi" aria-label="Deskripsi" aria-describedby="desc-addon" name="vdesc" id="voter-desc" style="height: 6rem" required></textarea>
+                            <label class="text-muted h6" for="voter-desc">Deskripsi</label>
+                        </div>
+                        {% endif %}
+                        {% if data['vavatar'] == True: %}
+                        <div class="row mt-3">
+                            <div class="col-auto">
+                                <label class="text-gradient text-primary h6 pt-25" for="avatarInput">Foto Voter</label>
+                            </div>
+                            <div class="col">
+                                <input type="file" class="form-control form-control-lg" placeholder="Avatar" aria-label="Avatar" aria-describedby="avatar-addon" name="vavatar" id="avatarInput" required>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn bg-gradient-secondary my-0" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" name="submit" value="add-voter" class="btn bg-gradient-primary my-0">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Candidate -->
+    <div class="modal fade" id="edit-candidate" tabindex="-1" role="dialog" aria-labelledby="edit-candidate" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" id="form-edit-candidate" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Data Candidate</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true text-dark">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="candidate-id" name="id_candidate" value="" required>
+                        <div class="form-floating mb-3">
+                            <input type="text" id="candidate-name" class="form-control" placeholder="Nama" aria-label="Nama" aria-describedby="name-addon" name="name" required>
+                            <label class="text-muted h6" for="candidate-name">Nama</label>
+                        </div>
+                        {% if data['cdesc'] == True: %}
+                        <label class="text-gradient text-primary h6" for="editor">Deskripsi Candidate</label>
+                        <div id="editor"></div>
+                        {% endif %}
+                        {% if data['cavatar'] == True: %}
+                        <div class="row mt-3">
+                            <div class="col-auto">
+                                <label class="text-gradient text-primary h6 pt-25" for="cavatar">Foto Candidate</label>
+                            </div>
+                            <div class="col">
+                                <input type="file" class="form-control form-control-lg" placeholder="Avatar" aria-label="Avatar" aria-describedby="avatar-addon" name="cavatar" id="cavatar">
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn bg-gradient-secondary my-0" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" name="submit" value="edit-candidate" class="btn bg-gradient-primary my-0">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Voter -->
+    <div class="modal fade" id="edit-voter" tabindex="-1" role="dialog" aria-labelledby="edit-voter" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" id="form-edit-voter" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Data Voter</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true text-dark">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="voter-id" name="id_voter" value="" required>
+                        <div class="form-floating mb-3">
+                            <input type="text" id="voter-name" class="form-control" placeholder="Nama" aria-label="Nama" aria-describedby="name-addon" name="name" required>
+                            <label class="text-muted h6" for="voter-name">Nama</label>
+                        </div>
+                        {% if data['vdesc'] == True: %}
+                        <div class="form-floating mt-1">
+                            <textarea class="form-control" placeholder="Deskripsi" aria-label="Deskripsi" aria-describedby="desc-addon" name="vdesc" id="voter-desc" style="height: 6rem" required></textarea>
+                            <label class="text-muted h6" for="voter-desc">Deskripsi</label>
+                        </div>
+                        {% endif %}
+                        {% if data['vavatar'] == True: %}
+                        <div class="row mt-3">
+                            <div class="col-auto">
+                                <label class="text-gradient text-primary h6 pt-25" for="avatarInput">Foto Voter</label>
+                            </div>
+                            <div class="col">
+                                <input type="file" class="form-control form-control-lg" placeholder="Avatar" aria-label="Avatar" aria-describedby="avatar-addon" name="vavatar" id="avatarInput">
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn bg-gradient-secondary my-0" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" name="submit" value="edit-voter" class="btn bg-gradient-primary my-0">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Deskripsi -->
+    <div class="modal fade" id="modal-preview" tabindex="-1" role="dialog" aria-labelledby="modal-preview" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                    <h5 class="modal-title mx-auto">Deskripsi</h5>
+                </div>
+                <div class="modal-body align-middle ql-editor" id="preview-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Username Password -->
+    <div class="modal fade" id="modal-credential" tabindex="-1" role="dialog" aria-labelledby="modal-credential" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content" id="credential-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">Data Login Voting</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body align-middle">
+                    <p class="text-secondary">ID Voting : <span class="text-dark font-weight-bold" id="voting-id">{{votingDetail['id_voting']}}</span></p>
+                    <p class="text-secondary">Kode Pengguna : <span class="text-dark font-weight-bold" id="username"></span></p>
+                    <p class="text-secondary">Kata Sandi : <span class="text-dark font-weight-bold" id="password"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-gradient-secondary my-0" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn my-0" id="btn-copy">Salin Link Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+{% include '_script.html' %}
+
+<!-- Moment -->
+<script src="{{url_for('static', filename='styles/js/moment.min.js')}}"></script>
+<!-- Date Range Picker -->
+<script src="{{url_for('static', filename='styles/js/daterangepicker.min.js')}}"></script>
+<!-- Date Quill Editor -->
+<script src="{{url_for('static', filename='styles/js/quill.min.js')}}"></script>
+
+<script type="text/javascript">
+    function candidate(value) {
+        var avatar = value
+        $("#img_avatar").attr('src', '/static/images/candidate/' + avatar);
+    }
+
+    function voter(value) {
+        var avatar = value
+        $("#img_avatar").attr('src', '/static/images/voter/' + avatar);
+    }
+
+    function edit(value) {
+        var id_voting = value
+        $.ajax({
+            url: "/getdata/voting/" + id_voting,
+            type: "GET",
+            success: function(response) {
+                var formVoting = document.querySelectorAll('#form-edit-voting')[0];
+                var id_voting = formVoting.querySelector('#voting-id');
+                var name = formVoting.querySelector('#voting-name');
+                var voting_desc = formVoting.querySelector('#voting-desc');
+                var datetimes = formVoting.querySelector('#datetimes');
+                var cname = formVoting.querySelector('#candidate-name');
+                var cdesc = formVoting.querySelector('#candidate-desc');
+                var cavatar = formVoting.querySelector('#candidate-avatar');
+                var vname = formVoting.querySelector('#voter-name');
+                var vdesc = formVoting.querySelector('#voter-desc');
+                var vavatar = formVoting.querySelector('#voter-avatar');
+                var viewer = formVoting.querySelector('#viewer-access');
+
+                name.value = response['name'];
+                voting_desc.value = response['voting_desc'];
+                if (response['cname']) {
+                    cname.setAttribute('checked', 'checked');
+                } else {
+                    cname.removeAttribute('checked');
+                }
+                if (response['cdesc']) {
+                    cdesc.setAttribute('checked', 'checked');
+                } else {
+                    cdesc.removeAttribute('checked');
+                }
+                if (response['cavatar']) {
+                    cavatar.setAttribute('checked', 'checked');
+                } else {
+                    cavatar.removeAttribute('checked');
+                }
+                if (response['vname']) {
+                    vname.setAttribute('checked', 'checked');
+                } else {
+                    vname.removeAttribute('checked');
+                }
+                if (response['vdesc']) {
+                    vdesc.setAttribute('checked', 'checked');
+                } else {
+                    vdesc.removeAttribute('checked');
+                }
+                if (response['vavatar']) {
+                    vavatar.setAttribute('checked', 'checked');
+                } else {
+                    vavatar.removeAttribute('checked');
+                }
+                if (response['viewer']) {
+                    viewer.setAttribute('checked', 'checked');
+                } else {
+                    viewer.removeAttribute('checked');
+                }
+
+                $(datetimes).daterangepicker({
+                    timePicker: true,
+                    minDate: moment().startOf('hour').add(1, 'hour'),
+                    startDate: moment(response['date_start']),
+                    endDate: moment(response['date_end']),
+                    locale: {
+                        format: 'DD/MM/YYYY hh:mm A'
+                    }
+                });
+
+            },
+            error: function(xhr) {
+                //Do Something to handle error
+            }
+        });
+    }
+
+    function respond(id_v, id_p) {
+        var id_voting = id_v
+        var id_problem = id_p
+        $.ajax({
+            url: "/getdata/problem/" + id_voting + "/" + id_problem,
+            type: "GET",
+            success: function(response) {
+                var formProblem = document.querySelectorAll('#form-respond-problem')[0];
+                var id_problem = formProblem.querySelector('#problem-id');
+                var msg_from = formProblem.querySelector('#msg-from');
+                var msg_from_role = formProblem.querySelector('#msg-from-role');
+                var msg_from_id = formProblem.querySelector('#msg-from-id');
+                var problem_msg = formProblem.querySelector('#problem-msg');
+
+                id_problem.value = response['id_problem'];
+                msg_from.innerHTML = response[response['msg_from']];
+                msg_from_role.innerHTML = response['msg_from'];
+                msg_from_id.innerHTML = response['id_user'];
+                problem_msg.innerHTML = response['message'];
+            },
+            error: function(xhr) {
+                //Do Something to handle error
+            }
+        });
+    }
+
+    // Quill Editor
+    var toolbarOptions = [
+        ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+        // ['blockquote', 'code-block'],
+
+        // [{ 'header': 1 }, { 'header': 2 }], // custom button values
+        [{
+            'list': 'ordered'
+        }, {
+            'list': 'bullet'
+        }, {
+            'align': []
+        }],
+        [{
+            'script': 'sub'
+        }, {
+            'script': 'super'
+        }], // superscript/subscript
+        [{
+            'indent': '-1'
+        }, {
+            'indent': '+1'
+        }], // outdent/indent
+        // [{ 'direction': 'rtl' }], // text direction
+
+        [{
+            'size': ['small', false, 'large', 'huge']
+        }], // custom dropdown
+        // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+        [{
+            'color': []
+        }, {
+            'background': []
+        }], // dropdown with defaults from theme
+        [{
+            'font': []
+        }],
+
+        ['clean'] // remove formatting button
+    ];
+
+    var editor = document.querySelectorAll('#editor')
+    editor.forEach(function(item) {
+        var quill = new Quill(item, {
+            modules: {
+                toolbar: toolbarOptions
+            },
+            theme: 'snow'
+        });
+    });
+
+    $(document).ready(function() {
+        $("#form-add-candidate").on("submit", function() {
+            var hvalue = $('.ql-editor').html();
+            $(this).append("<textarea name='cdesc' style='display:none'>" + hvalue + "</textarea>");
+        });
+    });
+
+    function preview(value) {
+        $('#preview-body').html(value)
+
+    }
+
+    function editCandidate(value) {
+        var id_voting = "{{votingDetail['id_voting']}}"
+        var id_candidate = value
+
+        $.ajax({
+            url: "/getdata/candidate/" + id_voting + "/" + id_candidate,
+            type: "GET",
+            success: function(response) {
+                var formEdit = document.querySelectorAll('#form-edit-candidate')[0];
+                var id_candidate = formEdit.querySelector('#candidate-id');
+                var name = formEdit.querySelector('#candidate-name');
+
+                id_candidate.value = response['id_candidate'];
+                name.value = response['name'];
+
+                if (response['description']) {
+                    var candidate_desc = formEdit.querySelector('.ql-editor');
+                    candidate_desc.innerHTML = response['description']
+
+                    $("#form-edit-candidate").on("submit", function() {
+                        var hvalue = formEdit.querySelector('.ql-editor').innerHTML;
+                        $(this).append("<textarea name='cdesc' style='display:none'>" + hvalue + "</textarea>");
+                    });
+                }
+
+            },
+            error: function(xhr) {
+                //Do Something to handle error
+            }
+        });
+    }
+
+    function editVoter(value) {
+        var id_voting = "{{votingDetail['id_voting']}}"
+        var id_voter = value
+        $.ajax({
+            url: "/getdata/voter/" + id_voting + "/" + id_voter,
+            type: "GET",
+            success: function(response) {
+                var formEdit = document.querySelectorAll('#form-edit-voter')[0];
+                var id_voter = formEdit.querySelector('#voter-id');
+                var name = formEdit.querySelector('#voter-name');
+
+                id_voter.value = response['id_voter'];
+                name.value = response['name'];
+                if (response['description']) {
+                    var voter_desc = formEdit.querySelector('#voter-desc');
+                    voter_desc.value = response['description'];
+                }
+            },
+            error: function(xhr) {
+                //Do Something to handle error
+            }
+        });
+    }
+
+    function credential(user, pass) {
+        var voting = '{{votingDetail['id_voting']}}'
+        var credential = document.querySelector('#credential-data');
+        var username = credential.querySelector('#username');
+        var password = credential.querySelector('#password');
+        var btn = credential.querySelector('#btn-copy');
+
+        username.innerHTML = user;
+        password.innerHTML = pass;
+        
+        btn.classList.add('bg-gradient-info');
+        btn.classList.remove('bg-gradient-success');
+        btn.setAttribute("onclick", "btnCopy('{{request.host_url}}voting-page/login/" + voting + "/" + user + "/" + pass + "')")
+
+    }
+
+    function btnCopy(link) {
+        var text = link;
+        navigator.clipboard.writeText(text).then(function() {
+            var credential = document.querySelector('#credential-data');
+            var btn = credential.querySelector('#btn-copy');
+            btn.classList.add('bg-gradient-success');
+            btn.classList.remove('bg-gradient-info');
+            
+            Toastify({
+                text: "Link Login berhasil disalin",
+                duration: 4000,
+                close: false,
+                gravity: "top",
+                position: "center",
+                className: "bg-gradient-secondary font-weight-bold border-radius-md",
+            }).showToast();
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+    }
+    
+    function btnLink(data) {
+        var text = data;
+        navigator.clipboard.writeText(text).then(function() {
+            var groupLink = document.querySelector('#group-link')
+            var title = groupLink.querySelector('#title-link')
+            var link = groupLink.querySelector('#voting-link')
+            
+            title.classList.add('btn-outline-success', 'text-success');
+            link.classList.add('is-valid');
+            
+            Toastify({
+                text: "Link Voting berhasil disalin",
+                duration: 4000,
+                close: false,
+                gravity: "top",
+                position: "center",
+                className: "bg-gradient-secondary font-weight-bold border-radius-md",
+            }).showToast();
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+    }
+
+</script>
+
+{% endblock %}
