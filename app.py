@@ -1,11 +1,10 @@
-from flask import Flask, render_template, flash, session, request, redirect, url_for, make_response
+from flask import Flask, render_template, flash, session, request, redirect, make_response
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import yaml
 import os
-from datetime import datetime, timedelta
-import urllib.request
+from datetime import datetime
 import string
 import random
 import base64
@@ -1782,4 +1781,4 @@ def validate_hash(vote):
 # MAIN PROGRAM =================================================================
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5002, debug=True)
+    app.run(host='0.0.0.0', port=5002, debug=True)
