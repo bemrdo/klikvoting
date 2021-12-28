@@ -1333,6 +1333,7 @@ def generate_id(size = 8, chars = string.ascii_uppercase + string.ascii_lowercas
 
 def convert_datetime(option, datestring):
     if option == 'mtl':
+        return str(datetime.strptime(datestring, '%d/%m/%Y %I:%M %p'))
     if option == 'ltm':
         return str(datestring)
     if option == 'lts':
