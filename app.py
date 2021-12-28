@@ -35,8 +35,8 @@ app.config['UPLOAD_FOLDER_VOTER'] = UPLOAD_FOLDER_VOTER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-path_wkhtmltopdf = '/usr/bin/wkhtmltopdf'
-config_pdfkit = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+# path_wkhtmltopdf = '/usr/bin/wkhtmltopdf'
+# config_pdfkit = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 
 # ROUTE ========================================================================
 
@@ -710,7 +710,7 @@ def report_voting(id_voting):
         'no-outline':None
     }
     css = ['static/styles/css/bootstrap.min.css', 'static/styles/css/soft-ui-dashboard.min.css']
-    pdf = pdfkit.from_string(rendered, False, options = options, css = css, configuration=config_pdfkit)
+    pdf = pdfkit.from_string(rendered, False, options = options, css = css)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'inline; laporan.pdf'
