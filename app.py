@@ -46,7 +46,6 @@ def appLogin():
     try:
         if session['login'] == True and (session['role'] == 'admin' or session['role'] == 'organizer'):
             flash('Anda telah Login', 'secondary')
-            print(str(datetime.now()))
             return redirect('/' + session['role'] + '/dashboard/')
         else:
             return login()
@@ -57,6 +56,7 @@ def appLogin():
 def appLogout():
     logout()
     flash('Anda berhasil Logout', 'secondary')
+    return (str(datetime.now()))
     return redirect('/')
 
 @app.route('/registration/', methods = ['GET', 'POST'])
