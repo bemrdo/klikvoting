@@ -56,7 +56,6 @@ def appLogin():
 def appLogout():
     logout()
     flash('Anda berhasil Logout', 'secondary')
-    return (str(datetime.now()))
     return redirect('/')
 
 @app.route('/registration/', methods = ['GET', 'POST'])
