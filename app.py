@@ -46,6 +46,7 @@ def appLogin():
     try:
         if session['login'] == True and (session['role'] == 'admin' or session['role'] == 'organizer'):
             flash('Anda telah Login', 'secondary')
+            print(str(datetime.now()))
             return redirect('/' + session['role'] + '/dashboard/')
         else:
             return login()
