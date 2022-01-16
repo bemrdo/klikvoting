@@ -45,11 +45,11 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 @app.route('/login/', methods = ['GET', 'POST'])
 def appLogin():
     try:
+        return (datetime.now(pytz.timezone('Asia/Makassar')).strftime('%d/%m/%Y %I:%M %p'))
         if session['login'] == True and (session['role'] == 'admin' or session['role'] == 'organizer'):
             flash('Anda telah Login', 'secondary')
             return redirect('/' + session['role'] + '/dashboard/')
         else:
-            return (datetime.now(pytz.timezone('Asia/Makassar')).strftime('%d/%m/%Y %I:%M %p'))
             return login()
     except:
         return login()
