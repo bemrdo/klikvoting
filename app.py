@@ -45,7 +45,6 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 @app.route('/login/', methods = ['GET', 'POST'])
 def appLogin():
     try:
-        return (datetime.now(pytz.timezone('Asia/Makassar')))
         if session['login'] == True and (session['role'] == 'admin' or session['role'] == 'organizer'):
             flash('Anda telah Login', 'secondary')
             return redirect('/' + session['role'] + '/dashboard/')
@@ -542,7 +541,7 @@ def registration():
         passhash = generate_password_hash(user['password'])
         address = user['address']
         institution = user['institution']
-        created_at = str(datetime.now(pytz.timezone('Asia/Makassar')))
+        created_at = str(datetime.now())
 
         if 'card_id' not in request.files:
             flash('Tidak dapat memuat Foto Kartu ID', 'warning')
@@ -577,7 +576,7 @@ def admin_dashboard():
     voting['active'] = count_voting_active()
     voting['finish'] = count_voting_finish()
     votingDetails = get_voting_dashboard()
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     return render_template('adminDashboard.html', core = core, organizer = organizer, voting = voting, votingDetails = votingDetails, now = now)
 
 def admin_organizer():
@@ -614,13 +613,13 @@ def admin_organizer_detail(id):
     else:
         userVotings = None
     cur.close()
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     voting = count_voting_detail(id)
     return render_template('adminOrganizerDetail.html', core = core, userDetail = userDetail, userVotings = userVotings, voting = voting, now = now)
 
 def admin_voting():
     core = {'title':'Panel Admin', 'subtitle':'Kelola Voting', 'aside':True, 'page':['Kelola Voting']}
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     cur = mysql.connection.cursor()
     resultValue = cur.execute("SELECT id_voting, id_user, name, voting_desc, date_start, date_end FROM voting ORDER BY created_at DESC")
     if resultValue > 0:
@@ -634,7 +633,7 @@ def admin_voting():
 
 def admin_voting_detail(id):
     core = {'title':'Panel Admin', 'subtitle':'Data Candidate & Voter', 'aside':True, 'page':['Kelola Voting', 'Detail Voting']}
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     cur = mysql.connection.cursor()
     resultValue = cur.execute("SELECT id_voting, id_user, name, voting_desc, date_start, date_end, candidate, voter, viewer, last_checked FROM voting WHERE id_voting = %s", [id])
     if resultValue > 0:
@@ -664,7 +663,7 @@ def admin_voting_detail(id):
 
 def get_report(id):
     core = {'title':'Panel ' + 'Admin' if session['role'] == 'admin' else 'Organizer', 'subtitle':'Data Hasil Voting', 'aside':True, 'page':['Kelola Voting', 'Hasil Voting']}
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     votingDetail = get_voting(id)
     votingCounts = get_count(id)
     cur = mysql.connection.cursor()
@@ -707,7 +706,7 @@ def report_voting(id_voting):
             ('Accept-Encoding', 'gzip')
         ],
         'footer-right':'[page] dari [topage] halaman',
-        'footer-left':datetime.now(pytz.timezone('Asia/Makassar')).strftime('%d/%m/%Y %I:%M %p'),
+        'footer-left':datetime.now().strftime('%d/%m/%Y %I:%M %p'),
         'footer-font-size':10,
         'no-outline':None
     }
@@ -721,7 +720,7 @@ def report_voting(id_voting):
 
 def admin_problem():
     core = {'title':'Panel Admin', 'subtitle':'Pertanyaan dan Keluhan', 'aside':True, 'page':['Pertanyaan dan Keluhan']}
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     if request.method == 'POST':
         data = request.form
         if data['submit'] == 'respond':
@@ -746,7 +745,7 @@ def admin_problem():
 
 def organizer_dashboard():
     core = {'title':'Panel Organizer', 'subtitle':'Dashboard', 'aside':True, 'page':['Dashboard']}
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     if request.method == 'POST':
         data = request.form
         if data['submit'] == 'create-voting':
@@ -760,7 +759,7 @@ def organizer_dashboard():
             candidate = str(data.getlist('candidate'))
             voter = str(data.getlist('voter'))
             viewer = data['viewer_access'] if 'viewer_access' in data else 'off'
-            created_at = str(datetime.now(pytz.timezone('Asia/Makassar')))
+            created_at = str(datetime.now())
             cur = mysql.connection.cursor()
             cur.execute("INSERT INTO voting(id_voting, id_user, name, voting_desc, date_start, date_end, candidate, voter, viewer, created_at) "\
             "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (id_voting, id_user, name, voting_desc, date_start, date_end, candidate, voter, viewer, created_at))
@@ -864,7 +863,7 @@ def organizer_dashboard():
 
 def organizer_voting():
     core = {'title':'Panel Organizer', 'subtitle':'Kelola Voting', 'aside':True, 'page':['Kelola Voting']}
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     cur = mysql.connection.cursor()
     resultValue = cur.execute("SELECT v.id_voting, v.name, v.voting_desc, v.date_start, v.date_end FROM voting v INNER JOIN user u ON v.id_user = u.id_user WHERE u.id_user = '{}' AND NOT u.status = 'inactived' ORDER BY v.created_at DESC".format(session['id_user']))
     if resultValue > 0:
@@ -875,7 +874,7 @@ def organizer_voting():
 
 def organizer_voting_detail(id):
     core = {'title':'Panel Organizer', 'subtitle':'Kelola Voting', 'aside':True, 'page':['Kelola Voting', 'Data Candidate dan Voter']}
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     if request.method == 'POST':
         data = request.form
         if data['submit'] == 'edit-voting':
@@ -903,7 +902,7 @@ def organizer_voting_detail(id):
             username = 'C-' + generate_id()
             password = generate_id(size = 12)
             name = candidate['name']
-            created_at = str(datetime.now(pytz.timezone('Asia/Makassar')))
+            created_at = str(datetime.now())
 
             if 'cdesc' in candidate:
                 description = candidate['cdesc']
@@ -950,7 +949,7 @@ def organizer_voting_detail(id):
             username = 'V-' + generate_id()
             password = generate_id(size = 12)
             name = voter['name']
-            created_at = str(datetime.now(pytz.timezone('Asia/Makassar')))
+            created_at = str(datetime.now())
 
             if 'vdesc' in voter:
                 description = voter['vdesc']
@@ -996,7 +995,7 @@ def organizer_voting_detail(id):
             table = 'c_' + id_voting
             id_candidate = candidate['id_candidate']
             name = candidate['name']
-            created_at = str(datetime.now(pytz.timezone('Asia/Makassar')))
+            created_at = str(datetime.now())
             if 'cdesc' in candidate:
                 description = candidate['cdesc']
                 cdesc = True
@@ -1040,7 +1039,7 @@ def organizer_voting_detail(id):
             table = 'v_' + id_voting
             id_voter = voter['id_voter']
             name = voter['name']
-            created_at = str(datetime.now(pytz.timezone('Asia/Makassar')))
+            created_at = str(datetime.now())
             if 'vdesc' in voter:
                 description = voter['vdesc']
                 vdesc = True
@@ -1140,7 +1139,7 @@ def organizer_voting_detail(id):
 
 def organizer_problem():
     core = {'title':'Panel Organizer', 'subtitle':'Pertanyaan dan Keluhan', 'aside':True, 'page':['Pertanyaan dan Keluhan']}
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     if request.method == 'POST':
         data = request.form
         if data['submit'] == 'respond':
@@ -1191,7 +1190,7 @@ def organizer_problem():
 
 def voting_landing():
     core = {'title':'Login Candidate/Voter'}
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     if request.method == 'POST':
         voting = request.form
         id_voting = voting['id_voting']
@@ -1221,7 +1220,7 @@ def voting_login_credential(id_voting, username, password):
 
 def voting_login(id):
     core = {'title':'Login Voting'}
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     if request.method == 'POST':
         user = request.form
         username = user['username']
@@ -1260,7 +1259,7 @@ def voting_login(id):
 
 def voting_page():
     core = {'title':'Halaman Voting', 'subtitle':'Halaman Voting', 'page':['Halaman Voting']}
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     if request.method == 'POST':
         data = request.form
         if data['submit'] == 'vote-candidate':
@@ -1285,7 +1284,7 @@ def voting_page():
     " organizer FROM voting INNER JOIN user ON voting.id_user = user.id_user WHERE voting.id_voting = '{}'".format(session['id_voting']))
     if resultValue > 0:
         voting = cur.fetchone()
-        date_now = datetime.now(pytz.timezone('Asia/Makassar'))
+        date_now = datetime.now()
         date_start = voting['date_start']
         date_end = voting['date_end']
         voting['date_start'] = convert_datetime('lts', voting['date_start'])
@@ -1317,7 +1316,7 @@ def voting_page():
 
 def live_count(id):
     core = {'title':'Halaman Voting', 'subtitle':'Live Count Voting', 'page':['Halaman Voting', 'Live Count']}
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     votingDetail = get_voting(id)
     votingCounts = get_count(id)
     return render_template("liveCount.html", core = core, now = now, votingDetail = votingDetail, votingCounts = votingCounts, id_voting = id)
@@ -1587,7 +1586,7 @@ def check_idle(id):
     resultValue = cur.execute("SELECT date_end FROM voting WHERE id_voting = '{}'".format(id))
     if resultValue > 0:
         date_end = cur.fetchone()['date_end']
-        date_now = datetime.now(pytz.timezone('Asia/Makassar'))
+        date_now = datetime.now()
         cur.close()
         if date_end < date_now:
             return True
@@ -1707,7 +1706,7 @@ def vote_hash(id_candidate):
     role = session['role']
     table_user = ('v_' if role == 'voter' else 'c_') + id_voting
 
-    date_now = datetime.now(pytz.timezone('Asia/Makassar'))
+    date_now = datetime.now()
     cur = mysql.connection.cursor()
     resultValue = cur.execute("SELECT date_start, date_end FROM voting WHERE id_voting = '{}'".format(id_voting))
     if resultValue > 0:
@@ -1747,7 +1746,7 @@ def validate_voting(id_voting):
         votingHash = cur.fetchall()
         for vote in votingHash:
             validate_hash(vote)
-    now = datetime.now(pytz.timezone('Asia/Makassar'))
+    now = datetime.now()
     cur.execute("UPDATE voting SET last_checked = '{}' WHERE id_voting = '{}'".format(now, id_voting))
     mysql.connection.commit()
     cur.close()
