@@ -37,6 +37,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 IST = pytz.timezone('Asia/Makassar')
+# 2022-01-17 06:03:11.817757+08:00
 
 # path_wkhtmltopdf = '/usr/bin/wkhtmltopdf'
 # config_pdfkit = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
@@ -578,7 +579,7 @@ def admin_dashboard():
     voting['active'] = count_voting_active()
     voting['finish'] = count_voting_finish()
     votingDetails = get_voting_dashboard()
-    now = datetime.now(IST)
+    now = datetime.now()
     return render_template('adminDashboard.html', core = core, organizer = organizer, voting = voting, votingDetails = votingDetails, now = now)
 
 def admin_organizer():
