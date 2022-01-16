@@ -36,6 +36,8 @@ app.config['UPLOAD_FOLDER_VOTER'] = UPLOAD_FOLDER_VOTER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
+IST = pytz.timezone('Asia/Makassar')
+
 # path_wkhtmltopdf = '/usr/bin/wkhtmltopdf'
 # config_pdfkit = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 
@@ -576,7 +578,7 @@ def admin_dashboard():
     voting['active'] = count_voting_active()
     voting['finish'] = count_voting_finish()
     votingDetails = get_voting_dashboard()
-    now = datetime.now()
+    now = datetime.now(IST)
     return render_template('adminDashboard.html', core = core, organizer = organizer, voting = voting, votingDetails = votingDetails, now = now)
 
 def admin_organizer():
