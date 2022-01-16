@@ -615,13 +615,13 @@ def admin_organizer_detail(id):
     else:
         userVotings = None
     cur.close()
-    now = datetime.now(IST)
+    now = datetime.now()
     voting = count_voting_detail(id)
     return render_template('adminOrganizerDetail.html', core = core, userDetail = userDetail, userVotings = userVotings, voting = voting, now = now)
 
 def admin_voting():
     core = {'title':'Panel Admin', 'subtitle':'Kelola Voting', 'aside':True, 'page':['Kelola Voting']}
-    now = datetime.now(IST)
+    now = datetime.now()
     cur = mysql.connection.cursor()
     resultValue = cur.execute("SELECT id_voting, id_user, name, voting_desc, date_start, date_end FROM voting ORDER BY created_at DESC")
     if resultValue > 0:
@@ -635,7 +635,7 @@ def admin_voting():
 
 def admin_voting_detail(id):
     core = {'title':'Panel Admin', 'subtitle':'Data Candidate & Voter', 'aside':True, 'page':['Kelola Voting', 'Detail Voting']}
-    now = datetime.now(IST)
+    now = datetime.now()
     cur = mysql.connection.cursor()
     resultValue = cur.execute("SELECT id_voting, id_user, name, voting_desc, date_start, date_end, candidate, voter, viewer, last_checked FROM voting WHERE id_voting = %s", [id])
     if resultValue > 0:
@@ -665,7 +665,7 @@ def admin_voting_detail(id):
 
 def get_report(id):
     core = {'title':'Panel ' + 'Admin' if session['role'] == 'admin' else 'Organizer', 'subtitle':'Data Hasil Voting', 'aside':True, 'page':['Kelola Voting', 'Hasil Voting']}
-    now = datetime.now(IST)
+    now = datetime.now()
     votingDetail = get_voting(id)
     votingCounts = get_count(id)
     cur = mysql.connection.cursor()
