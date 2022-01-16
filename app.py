@@ -49,6 +49,7 @@ def appLogin():
             flash('Anda telah Login', 'secondary')
             return redirect('/' + session['role'] + '/dashboard/')
         else:
+            return (datetime.now(pytz.timezone('Asia/Makassar')).strftime('%d/%m/%Y %I:%M %p'))
             return login()
     except:
         return login()
