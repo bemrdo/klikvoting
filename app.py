@@ -544,7 +544,7 @@ def registration():
         passhash = generate_password_hash(user['password'])
         address = user['address']
         institution = user['institution']
-        created_at = str(datetime.now(IST))
+        created_at = str(datetime.now(IST)).split('+')[0]
 
         if 'card_id' not in request.files:
             flash('Tidak dapat memuat Foto Kartu ID', 'warning')
