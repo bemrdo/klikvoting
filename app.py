@@ -36,9 +36,9 @@ app.config['UPLOAD_FOLDER_VOTER'] = UPLOAD_FOLDER_VOTER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-os.environ['TZ'] = 'Asia/Makassar'
-datetime.tzset()
-# IST = pytz.timezone('Asia/Makassar')
+# os.environ['TZ'] = 'Asia/Makassar'
+# datetime.tzset()
+IST = pytz.timezone('Asia/Makassar')
 # 2022-01-17 06:03:11.817757+08:00
 
 # path_wkhtmltopdf = '/usr/bin/wkhtmltopdf'
@@ -546,7 +546,7 @@ def registration():
         passhash = generate_password_hash(user['password'])
         address = user['address']
         institution = user['institution']
-        created_at = str(datetime.now())
+        created_at = str(datetime.now(IST))
 
         if 'card_id' not in request.files:
             flash('Tidak dapat memuat Foto Kartu ID', 'warning')
@@ -581,7 +581,7 @@ def admin_dashboard():
     voting['active'] = count_voting_active()
     voting['finish'] = count_voting_finish()
     votingDetails = get_voting_dashboard()
-    now = datetime.now()
+    now = datetime.now(IST)
     return render_template('adminDashboard.html', core = core, organizer = organizer, voting = voting, votingDetails = votingDetails, now = now)
 
 def admin_organizer():
@@ -618,7 +618,7 @@ def admin_organizer_detail(id):
     else:
         userVotings = None
     cur.close()
-    now = datetime.now()
+    now = datetime.now(IST)
     voting = count_voting_detail(id)
     return render_template('adminOrganizerDetail.html', core = core, userDetail = userDetail, userVotings = userVotings, voting = voting, now = now)
 
