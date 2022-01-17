@@ -37,7 +37,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 os.environ['TZ'] = 'Asia/Makassar'
-time.tzset()
+datetime.tzset()
 # IST = pytz.timezone('Asia/Makassar')
 # 2022-01-17 06:03:11.817757+08:00
 
