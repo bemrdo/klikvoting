@@ -544,7 +544,7 @@ def registration():
         passhash = generate_password_hash(user['password'])
         address = user['address']
         institution = user['institution']
-        created_at = str(datetime.now())
+        created_at = str(datetime.now(IST))
 
         if 'card_id' not in request.files:
             flash('Tidak dapat memuat Foto Kartu ID', 'warning')
@@ -579,7 +579,7 @@ def admin_dashboard():
     voting['active'] = count_voting_active()
     voting['finish'] = count_voting_finish()
     votingDetails = get_voting_dashboard()
-    now = datetime.now()
+    now = datetime.now(IST)
     return render_template('adminDashboard.html', core = core, organizer = organizer, voting = voting, votingDetails = votingDetails, now = now)
 
 def admin_organizer():
