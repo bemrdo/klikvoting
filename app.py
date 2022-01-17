@@ -616,7 +616,7 @@ def admin_organizer_detail(id):
     else:
         userVotings = None
     cur.close()
-    now = datetime.now()
+    now = datetime.now(IST)
     voting = count_voting_detail(id)
     return render_template('adminOrganizerDetail.html', core = core, userDetail = userDetail, userVotings = userVotings, voting = voting, now = now)
 
