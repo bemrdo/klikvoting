@@ -52,7 +52,7 @@
         <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('{{url_for('static', filename='images/core/profile3.jpg')}}'); background-position-y: 50%;">
         </div>
         <div class="row">
-            <div class="col-6">
+            <div class="col-xl-6 col-sm-12">
                 <div class="card card-body blur shadow-blur ms-4 mt-n7 overflow-hidden">
                     <div class="row">
                         <div class="col">
@@ -96,7 +96,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-xl-6 col-sm-12">
                 <div class="card card-body blur shadow-blur me-4 mt-n7 overflow-hidden min-height-voting-page">
                     <div class="row">
                         <div class="col">
@@ -173,7 +173,7 @@
             </div>
         </div>
     </div>
-    
+
     {% if event['finish'] == True: %}
     <div class="container-fluid pt-4">
         <div class="row justify-content-center">
@@ -211,7 +211,7 @@
         <div class="row justify-content-center">
             {% if candidates != None: %}
             {% for candidate in candidates: %}
-            <div class="col-4">
+            <div class="col-xl-4 col-sm-12">
                 <div class="card">
                     <div class="card-body pb-3">
                         {% if candidate['avatar'] != None: %}
