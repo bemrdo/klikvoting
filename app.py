@@ -774,15 +774,15 @@ def organizer_dashboard():
             table_voter = 'v_' + id_voting
             table_hash = 'h_' + id_voting
 
-            cur.execute("CREATE TABLE {} (id_candidate VARCHAR(40) NOT NULL, id_voting VARCHAR(40) NOT NULL, username VARCHAR(40) NOT NULL, pass VARCHAR(40) NOT NULL, name VARCHAR(255) NOT NULL, description LONGTEXT, avatar VARCHAR(40), status VARCHAR(40), validator VARCHAR(255), created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, "\
+            cur.execute("CREATE TABLE {} (id_candidate VARCHAR(40) NOT NULL, id_voting VARCHAR(40) NOT NULL, username VARCHAR(40) NOT NULL, pass VARCHAR(40) NOT NULL, name VARCHAR(255) NOT NULL, description LONGTEXT, avatar VARCHAR(40), status VARCHAR(40), validator VARCHAR(255), created_at TIMESTAMP NOT NULL DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR), "\
             "PRIMARY KEY (id_candidate), FOREIGN KEY (id_voting) REFERENCES voting(id_voting))".format(table_candidate))
             mysql.connection.commit()
 
-            cur.execute("CREATE TABLE {} (id_voter VARCHAR(40) NOT NULL, id_voting VARCHAR(40) NOT NULL, username VARCHAR(40) NOT NULL, pass VARCHAR(40) NOT NULL, name VARCHAR(40) NOT NULL, description LONGTEXT, avatar VARCHAR(40), status VARCHAR(40), validator VARCHAR(255), created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, "\
+            cur.execute("CREATE TABLE {} (id_voter VARCHAR(40) NOT NULL, id_voting VARCHAR(40) NOT NULL, username VARCHAR(40) NOT NULL, pass VARCHAR(40) NOT NULL, name VARCHAR(40) NOT NULL, description LONGTEXT, avatar VARCHAR(40), status VARCHAR(40), validator VARCHAR(255), created_at TIMESTAMP NOT NULL DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR), "\
             "PRIMARY KEY (id_voter), FOREIGN KEY (id_voting) REFERENCES voting(id_voting))".format(table_voter))
             mysql.connection.commit()
 
-            cur.execute("CREATE TABLE {} (id_hash VARCHAR(40) NOT NULL, id_voting VARCHAR(40) NOT NULL, id_candidate VARCHAR(40) NOT NULL, role VARCHAR(40) NOT NULL, encrypted VARCHAR(255) NOT NULL, status VARCHAR(40) NOT NULL, created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, "\
+            cur.execute("CREATE TABLE {} (id_hash VARCHAR(40) NOT NULL, id_voting VARCHAR(40) NOT NULL, id_candidate VARCHAR(40) NOT NULL, role VARCHAR(40) NOT NULL, encrypted VARCHAR(255) NOT NULL, status VARCHAR(40) NOT NULL, created_at TIMESTAMP NOT NULL DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR), "\
             "PRIMARY KEY (id_hash), FOREIGN KEY (id_voting) REFERENCES voting(id_voting), FOREIGN KEY (id_candidate) REFERENCES {}(id_candidate))".format(table_hash, table_candidate))
             mysql.connection.commit()
             cur.close()
@@ -1378,7 +1378,7 @@ def count_voting_total():
 
 def count_voting_disactive():
     cur = mysql.connection.cursor()
-    resultValue = cur.execute("SELECT COUNT(id_voting) AS disactive FROM voting WHERE date_start > CURRENT_TIMESTAMP")
+    resultValue = cur.execute("SELECT COUNT(id_voting) AS disactive FROM voting WHERE date_start > DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR)")
     if resultValue > 0:
         disactive = cur.fetchone()['disactive']
         cur.close()
@@ -1388,7 +1388,7 @@ def count_voting_disactive():
 
 def count_voting_active():
     cur = mysql.connection.cursor()
-    resultValue = cur.execute("SELECT COUNT(id_voting) AS active FROM voting WHERE date_start <= CURRENT_TIMESTAMP and date_end > CURRENT_TIMESTAMP")
+    resultValue = cur.execute("SELECT COUNT(id_voting) AS active FROM voting WHERE date_start <= DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR) and date_end > DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR)")
     if resultValue > 0:
         active = cur.fetchone()['active']
         cur.close()
@@ -1398,7 +1398,7 @@ def count_voting_active():
 
 def count_voting_finish():
     cur = mysql.connection.cursor()
-    resultValue = cur.execute("SELECT COUNT(id_voting) AS finish FROM voting WHERE date_end <= CURRENT_TIMESTAMP")
+    resultValue = cur.execute("SELECT COUNT(id_voting) AS finish FROM voting WHERE date_end <= DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR)")
     if resultValue > 0:
         finish = cur.fetchone()['finish']
         cur.close()
@@ -1408,7 +1408,7 @@ def count_voting_finish():
 
 def get_voting_dashboard():
     cur = mysql.connection.cursor()
-    resultValue = cur.execute("SELECT v.id_voting, v.name, v.date_start, v.date_end, u.name AS organizer, u.email, u.institution FROM voting v INNER JOIN user u ON v.id_user = u.id_user WHERE (MONTH(v.date_end) >= MONTH(CURRENT_TIMESTAMP) AND YEAR(v.date_start) = YEAR(CURRENT_TIMESTAMP)) OR YEAR(v.date_start) > YEAR(CURRENT_TIMESTAMP)")
+    resultValue = cur.execute("SELECT v.id_voting, v.name, v.date_start, v.date_end, u.name AS organizer, u.email, u.institution FROM voting v INNER JOIN user u ON v.id_user = u.id_user WHERE (MONTH(v.date_end) >= MONTH(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR)) AND YEAR(v.date_start) = YEAR(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR))) OR YEAR(v.date_start) > YEAR(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR))")
     if resultValue > 0:
         votingDetails = cur.fetchall()
         cur.close()
@@ -1446,17 +1446,17 @@ def count_voting_detail(id):
         total = cur.fetchone()['total']
     else:
         total = '0'
-    resultValue = cur.execute("SELECT COUNT(id_voting) AS disactive FROM voting WHERE date_start > CURRENT_TIMESTAMP AND id_user = '{}'".format(id))
+    resultValue = cur.execute("SELECT COUNT(id_voting) AS disactive FROM voting WHERE date_start > DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR) AND id_user = '{}'".format(id))
     if resultValue > 0:
         disactive = cur.fetchone()['disactive']
     else:
         disactive = '0'
-    resultValue = cur.execute("SELECT COUNT(id_voting) AS active FROM voting WHERE (date_start <= CURRENT_TIMESTAMP and date_end > CURRENT_TIMESTAMP) AND id_user = '{}'".format(id))
+    resultValue = cur.execute("SELECT COUNT(id_voting) AS active FROM voting WHERE (date_start <= DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR) and date_end > DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR)) AND id_user = '{}'".format(id))
     if resultValue > 0:
         active = cur.fetchone()['active']
     else:
         active = '0'
-    resultValue = cur.execute("SELECT COUNT(id_voting) AS finish FROM voting WHERE date_end <= CURRENT_TIMESTAMP AND id_user = '{}'".format(id))
+    resultValue = cur.execute("SELECT COUNT(id_voting) AS finish FROM voting WHERE date_end <= DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR) AND id_user = '{}'".format(id))
     if resultValue > 0:
         finish = cur.fetchone()['finish']
     else:
