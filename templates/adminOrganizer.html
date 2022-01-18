@@ -70,8 +70,8 @@
                                             <a href="/admin/organizer/approve/{{organizer['id_user']}}" class="btn btn-xs bg-gradient-success mb-0">Terima</a>
                                             {% elif organizer['status'] == 'pending' %}
                                             <p class="text-sm text-secondary mb-1">{{organizer['message']}}</p>
-                                            <a href="/admin/organizer/approve/{{organizer['id_user']}}" class="btn btn-xs bg-gradient-success mb-0">Terima</a>
-                                            <button type="button" onclick="reject(this)" value="{{organizer['id_user']}};{{organizer['name']}}" class="btn btn-xs bg-gradient-danger mt-1" data-bs-toggle="modal" data-bs-target="#modal-reject">Tolak</button>
+                                            <a href="/admin/organizer/approve/{{organizer['id_user']}}" class="btn btn-xs bg-gradient-success mb-0 mt-1">Terima</a>
+                                            <button type="button" onclick="reject(this)" value="{{organizer['id_user']}};{{organizer['name']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-1" data-bs-toggle="modal" data-bs-target="#modal-reject">Tolak</button>
                                             {% endif %}
                                         </td>
                                         <td class="fit pe-3 text-end">
