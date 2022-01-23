@@ -1722,6 +1722,7 @@ def vote_hash(id_candidate):
     event = {}
     event['start'] = str(date_start - date_now)[0] == '-'
     event['finish'] = str(date_end - date_now)[0] == '-'
+    print(event)
 
     if event['start'] == True and event['finish'] == False:
         cur = mysql.connection.cursor()
