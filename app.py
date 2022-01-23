@@ -1722,14 +1722,15 @@ def vote_hash(id_candidate):
     event = {}
     event['start'] = str(date_start - date_now)[0] == '-'
     event['finish'] = str(date_end - date_now)[0] == '-'
-    print(event, file=sys.stderr)
 
     if event['start'] == True and event['finish'] == False:
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO {}(id_hash, id_voting, id_candidate, role, encrypted, status) VALUES('{}', '{}', '{}', '{}', '{}', '{}')".format(table_hash, id_hash, id_voting, id_candidate, role, encrypted, status))
         mysql.connection.commit()
+        print('OK1', file=sys.stderr)
         cur.execute("UPDATE {} SET status = '{}', validator = '{}' WHERE id_{} = '{}'".format(table_user, id_hash, validator, role, id_user))
         mysql.connection.commit()
+        print('OK2', file=sys.stderr)
         cur.close()
         session['status'] = id_hash
 
