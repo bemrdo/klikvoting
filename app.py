@@ -767,7 +767,7 @@ def organizer_dashboard():
             created_at = str(datetime.now() + timedelta(hours = 8))
             cur = mysql.connection.cursor()
             cur.execute("INSERT INTO voting(id_voting, id_user, name, voting_desc, date_start, date_end, candidate, voter, viewer, created_at, created_at) "\
-            "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (id_voting, id_user, name, voting_desc, date_start, date_end, candidate, voter, viewer, created_at, last_checked))
+            "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (id_voting, id_user, name, voting_desc, date_start, date_end, candidate, voter, viewer, created_at, last_checked))
             mysql.connection.commit()
 
             table_candidate = 'c_' + id_voting
