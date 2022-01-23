@@ -440,8 +440,6 @@
         events: [
             {% if votingDetails != None %}
             {% for votingDetail in votingDetails: %}
-            console.log(moment(moment('{{votingDetail['date_end']}}').add(1, 'days')).format('YYYY-MM-DD'));
-            
             {
                 title: '{{votingDetail['name']}}',
                 start: moment('{{votingDetail['date_start']}}').format('YYYY-MM-DD'),
