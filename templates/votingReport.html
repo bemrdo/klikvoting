@@ -186,13 +186,13 @@
                                         <td class="text-center">
                                             <p class="text-sm text-secondary mb-0">{{votingReport['created_at'].strftime('%d/%m/%Y %I:%M %p')}}</p>
                                         </td>
-                                        <td class="align-middle text-center fit pe-4 mb-0">
+                                        <td class="align-middle text-center fit pe-4">
                                             {% if votingReport['status'] == 'checked': %}
-                                            <p class="text-gradient text-success text-sm">Diterima</p>
+                                            <p class="text-gradient text-success text-sm mb-0">Diterima</p>
                                             {% elif votingReport['status'] == 'rejected': %}
-                                            <p class="text-gradient text-danger text-sm">Ditolak</p>
+                                            <p class="text-gradient text-danger text-sm mb-0">Ditolak</p>
                                             {% elif votingReport['status'] == 'voted': %}
-                                            <p class="text-gradient text-secondary text-sm">Belum Validasi</p>
+                                            <p class="text-gradient text-secondary text-sm mb-0">Belum Validasi</p>
                                             {% endif %}
                                         </td>
                                     </tr>
