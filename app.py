@@ -774,15 +774,15 @@ def organizer_dashboard():
             table_voter = 'v_' + id_voting
             table_hash = 'h_' + id_voting
 
-            cur.execute("CREATE TABLE {} (id_candidate VARCHAR(40) NOT NULL, id_voting VARCHAR(40) NOT NULL, username VARCHAR(40) NOT NULL, pass VARCHAR(40) NOT NULL, name VARCHAR(255) NOT NULL, description LONGTEXT, avatar VARCHAR(40), status VARCHAR(40), validator VARCHAR(255), created_at TIMESTAMP NOT NULL DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR), "\
+            cur.execute("CREATE TABLE {} (id_candidate VARCHAR(40) NOT NULL, id_voting VARCHAR(40) NOT NULL, username VARCHAR(40) NOT NULL, pass VARCHAR(40) NOT NULL, name VARCHAR(255) NOT NULL, description LONGTEXT, avatar VARCHAR(40), status VARCHAR(40), validator VARCHAR(255), created_at TIMESTAMP NOT NULL, "\
             "PRIMARY KEY (id_candidate), FOREIGN KEY (id_voting) REFERENCES voting(id_voting))".format(table_candidate))
             mysql.connection.commit()
 
-            cur.execute("CREATE TABLE {} (id_voter VARCHAR(40) NOT NULL, id_voting VARCHAR(40) NOT NULL, username VARCHAR(40) NOT NULL, pass VARCHAR(40) NOT NULL, name VARCHAR(40) NOT NULL, description LONGTEXT, avatar VARCHAR(40), status VARCHAR(40), validator VARCHAR(255), created_at TIMESTAMP NOT NULL DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR), "\
+            cur.execute("CREATE TABLE {} (id_voter VARCHAR(40) NOT NULL, id_voting VARCHAR(40) NOT NULL, username VARCHAR(40) NOT NULL, pass VARCHAR(40) NOT NULL, name VARCHAR(40) NOT NULL, description LONGTEXT, avatar VARCHAR(40), status VARCHAR(40), validator VARCHAR(255), created_at TIMESTAMP NOT NULL, "\
             "PRIMARY KEY (id_voter), FOREIGN KEY (id_voting) REFERENCES voting(id_voting))".format(table_voter))
             mysql.connection.commit()
 
-            cur.execute("CREATE TABLE {} (id_hash VARCHAR(40) NOT NULL, id_voting VARCHAR(40) NOT NULL, id_candidate VARCHAR(40) NOT NULL, role VARCHAR(40) NOT NULL, encrypted VARCHAR(255) NOT NULL, status VARCHAR(40) NOT NULL, created_at TIMESTAMP NOT NULL DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 HOUR), "\
+            cur.execute("CREATE TABLE {} (id_hash VARCHAR(40) NOT NULL, id_voting VARCHAR(40) NOT NULL, id_candidate VARCHAR(40) NOT NULL, role VARCHAR(40) NOT NULL, encrypted VARCHAR(255) NOT NULL, status VARCHAR(40) NOT NULL, created_at TIMESTAMP NOT NULL, "\
             "PRIMARY KEY (id_hash), FOREIGN KEY (id_voting) REFERENCES voting(id_voting), FOREIGN KEY (id_candidate) REFERENCES {}(id_candidate))".format(table_hash, table_candidate))
             mysql.connection.commit()
             cur.close()
