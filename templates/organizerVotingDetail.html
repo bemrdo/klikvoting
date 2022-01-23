@@ -846,7 +846,7 @@
                 } else {
                     vavatar.removeAttribute('checked');
                 }
-                if (response['viewer']) {
+                if (response['viewer'] == 'on') {
                     viewer.setAttribute('checked', 'checked');
                 } else {
                     viewer.removeAttribute('checked');
@@ -1024,7 +1024,7 @@
 
         username.innerHTML = user;
         password.innerHTML = pass;
-        
+
         btn.classList.add('bg-gradient-info');
         btn.classList.remove('bg-gradient-success');
         btn.setAttribute("onclick", "btnCopy('{{request.host_url}}voting-page/login/" + voting + "/" + user + "/" + pass + "')")
@@ -1038,7 +1038,7 @@
             var btn = credential.querySelector('#btn-copy');
             btn.classList.add('bg-gradient-success');
             btn.classList.remove('bg-gradient-info');
-            
+
             Toastify({
                 text: "Link Login berhasil disalin",
                 duration: 4000,
@@ -1051,17 +1051,17 @@
             console.error('Async: Could not copy text: ', err);
         });
     }
-    
+
     function btnLink(data) {
         var text = data;
         navigator.clipboard.writeText(text).then(function() {
             var groupLink = document.querySelector('#group-link')
             var title = groupLink.querySelector('#title-link')
             var link = groupLink.querySelector('#voting-link')
-            
+
             title.classList.add('btn-outline-success', 'text-success');
             link.classList.add('is-valid');
-            
+
             Toastify({
                 text: "Link Voting berhasil disalin",
                 duration: 4000,
