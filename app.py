@@ -1583,6 +1583,7 @@ def get_voting(id):
         votingData['vname'] = True if 'vname' in votingData['voter'] else False
         votingData['vdesc'] = True if 'vdesc' in votingData['voter'] else False
         votingData['vavatar'] = True if 'vavatar' in votingData['voter'] else False
+        print(votingData)
         return votingData
     return None
 
