@@ -426,7 +426,7 @@
             }
         });
     });
-    console.log(moment(moment('{{votingDetail['date_end']}}').add(1, 'days')).format('YYYY-MM-DD'));
+    console.log(moment('{{votingDetail['date_end']}}'));
     var calendar = new FullCalendar.Calendar(document.getElementById("calendar"), {
         initialView: "dayGridMonth",
         headerToolbar: {
