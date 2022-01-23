@@ -1707,6 +1707,7 @@ def vote_hash(id_candidate):
     id_voting = session['id_voting']
     encrypted, validator = encrypt(id_user + '-' + id_candidate, id_user, id_hash)
     status = 'voted'
+    created_at = str(datetime.now() + timedelta(hours = 8))
     table_hash = 'h_' + id_voting
     role = session['role']
     table_user = ('v_' if role == 'voter' else 'c_') + id_voting
@@ -1725,14 +1726,7 @@ def vote_hash(id_candidate):
 
     if event['start'] == True and event['finish'] == False:
         cur = mysql.connection.cursor()
-        print(table_hash, file=sys.stderr)
-        print(id_hash, file=sys.stderr)
-        print(id_voting, file=sys.stderr)
-        print(id_candidate, file=sys.stderr)
-        print(role, file=sys.stderr)
-        print(encrypted, file=sys.stderr)
-        print(status, file=sys.stderr)
-        cur.execute("INSERT INTO {}(id_hash, id_voting, id_candidate, role, encrypted, status) VALUES('{}', '{}', '{}', '{}', '{}', '{}')".format(table_hash, id_hash, id_voting, id_candidate, role, encrypted, status))
+        cur.execute("INSERT INTO {}(id_hash, id_voting, id_candidate, role, encrypted, status, created_at) VALUES('{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(table_hash, id_hash, id_voting, id_candidate, role, encrypted, status, created_at))
         mysql.connection.commit()
         cur.execute("UPDATE {} SET status = '{}', validator = '{}' WHERE id_{} = '{}'".format(table_user, id_hash, validator, role, id_user))
         mysql.connection.commit()
