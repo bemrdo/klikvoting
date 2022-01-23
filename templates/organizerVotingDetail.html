@@ -851,12 +851,12 @@
                 } else {
                     viewer.removeAttribute('checked');
                 }
-                console.log(moment(response['date_start']).utcOffset(0, true).format());
+                console.log(moment.utc(response['date_start']));
                 $(datetimes).daterangepicker({
                     timePicker: true,
                     minDate: moment().startOf('hour').add(1, 'hour'),
-                    startDate: moment(response['date_start']).utcOffset(0, true).format(),
-                    endDate: moment(response['date_end']).utcOffset(0, true).format(),
+                    startDate: moment(response['date_start']),
+                    endDate: moment(response['date_end']),
                     locale: {
                         format: 'DD/MM/YYYY hh:mm A'
                     }
