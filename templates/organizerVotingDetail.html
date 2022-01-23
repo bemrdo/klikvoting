@@ -851,7 +851,7 @@
                 } else {
                     viewer.removeAttribute('checked');
                 }
-
+                console.log(response['date_start']);
                 $(datetimes).daterangepicker({
                     timePicker: true,
                     minDate: moment().startOf('hour').add(1, 'hour'),
