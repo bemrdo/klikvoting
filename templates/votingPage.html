@@ -172,6 +172,130 @@
                 </div>
             </div>
         </div>
+
+        <div class="row d-block d-xl-none">
+            <div class="col-12 mt-n9">
+                <div class="card card-body blur shadow-blur mt-n7 overflow-hidden">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="h-100">
+                                        <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">
+                                            {{session['id_voting']}}
+                                            {% if event['start'] == False: %}
+                                            <span class="badge bg-gradient-warning text-xxs">Nonaktif</span>
+                                            {% elif event['finish'] == True: %}
+                                            <span class="badge bg-gradient-dark text-xxs">Selesai</span>
+                                            {% else: %}
+                                            <span class="badge bg-gradient-success text-xxs">Aktif</span>
+                                            {% endif %}
+                                        </p>
+                                        <h3 class="mb-1 font-weight-bolder text-gradient text-primary">
+                                            {{voting['name']}}
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-auto">
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Pelaksanaan Kegiatan</p>
+                                    <p class="text-sm text-dark mb-0">{{voting['date_start']}}</p>
+                                    <p class="text-sm text-dark mb-0">{{voting['date_end']}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Deskripsi Kegiatan</p>
+                                    <p class="text-sm text-dark mb-0">{{voting['voting_desc']}}</p>
+                                </div>
+                                <div class="col-auto">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-block d-xl-none">
+                <div class="col-12">
+                    <div class="card card-body blur shadow-blur me-xl-4 mt-n7 overflow-hidden min-height-voting-page">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    {% if userData['avatar'] != None: %}
+                                    <div class="col-auto">
+                                        <div class="avatar avatar-xl position-relative align-middle">
+                                            <img src="/static/images/{{session['role']}}/{{userData['avatar']}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm" id='avatar' type="button" onclick="avatar('{{userData['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <div class="col my-auto">
+                                        <div class="h-100">
+                                            <h5 class="mb-1">
+                                                {{userData['name']}}
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col pt-1">
+                                        {% if userData['description'] != None: %}
+                                        <button type="button" class="btn btn-xs bg-gradient-primary mb-2" onclick="preview('{{userData['description']}}')" data-bs-toggle="modal" data-bs-target="#modal-preview">Deskripsi</button>
+                                        <br>
+                                        {% endif %}
+                                        <button type="button" class="btn btn-xs bg-gradient-info mb-0" data-bs-toggle="modal" data-bs-target="#tell-problem">Pertanyaan/Keluhan</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7 max-height-prob">
+                                <div class="table-responsive p-0">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4">No</th>
+                                                <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Pertanyaan/Keluhan</th>
+                                                <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Tanggapan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% if userProblems != None: %}
+                                            {% for problem in userProblems: %}
+                                            <tr>
+                                                <td class="ps-4 fit">
+                                                    <p class="text-sm font-weight-bold mb-0">{{loop.index}}</p>
+                                                </td>
+                                                <td class="text-wrap">
+                                                    <p class="text-sm mb-0">{{problem['message']}}</p>
+                                                    <p class="text-xxs text-secondary pt-2 mb-0">{{problem['msg_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                                </td>
+                                                <td class="text-wrap">
+                                                    {% if problem['respond'] != None: %}
+                                                    <p class="text-sm mb-0">{{problem['respond']}}</p>
+                                                    <p class="text-xxs text-secondary pt-2 mb-0">{{problem['rsp_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            {% else: %}
+                                            <tr>
+                                                <td colspan="3">
+                                                    <div class="align-middle text-center">
+                                                        <p class="text-xs text-secondary mb-0">Tidak ada pertanyaan dan keluhan yang disampaikan</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     {% if event['finish'] == True: %}
