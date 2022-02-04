@@ -104,7 +104,7 @@
                                 {% if userData['avatar'] != None: %}
                                 <div class="col-auto">
                                     <div class="avatar avatar-xl position-relative align-middle">
-                                        <img src="/static/images/{{session['role']}}/{{userData['avatar']}}" alt="profile_image" class="w-100 rounded-3 shadow-sm" id='avatar' type="button" onclick="avatar('{{userData['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
+                                        <img src="/static/images/{{session['role']}}/{{userData['avatar']}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm" id='avatar' type="button" onclick="avatar('{{userData['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
                                     </div>
                                 </div>
                                 {% endif %}
@@ -229,7 +229,7 @@
                                 {% if userData['avatar'] != None: %}
                                 <div class="col-auto">
                                     <div class="avatar avatar-xl position-relative align-middle">
-                                        <img src="/static/images/{{session['role']}}/{{userData['avatar']}}" alt="profile_image" class="w-100 rounded-3 shadow-sm" id='avatar' type="button" onclick="avatar('{{userData['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
+                                        <img src="/static/images/{{session['role']}}/{{userData['avatar']}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm" id='avatar' type="button" onclick="avatar('{{userData['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
                                     </div>
                                 </div>
                                 {% endif %}
@@ -343,7 +343,7 @@
                         <div class="row justify-content-center mb-2">
                             <div class="col-auto">
                                 <div class="avatar avatar-xxxl">
-                                    <img src="/static/images/candidate/{{candidate['avatar']}}" alt="profile_image" class="w-100 rounded-3 shadow-sm" id="avatar" type="button" onclick="candidate('{{candidate['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
+                                    <img src="/static/images/candidate/{{candidate['avatar']}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm" id="avatar" type="button" onclick="candidate('{{candidate['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
                                 </div>
                             </div>
                         </div>
