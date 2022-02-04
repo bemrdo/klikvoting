@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block sub_content %}
 
-<div class="container position-sticky z-index-sticky top-0">
+<div class="container position-sticky z-index-sticky top-0 d-none d-md-block">
     <div class="row">
         <div class="col-6">
             <!-- Navbar -->
@@ -20,12 +20,13 @@
 </div>
 <main class="main-content mt-0">
     <section>
-        <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style="background-image: url('{{url_for('static', filename='images/core/registration.jpg')}}');">
+        <div class="page-header align-items-start min-vh-50 pt-3 pb-11 m-3 border-radius-lg" style="background-image: url('{{url_for('static', filename='images/core/registration.jpg')}}');">
             <span class="mask bg-gradient-dark opacity-6"></span>
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-5 text-center mx-auto">
-                        <h3 class="text-white mb-2 mt-7">Login Voting</h3>
+                        <h1 class="display-2 font-weight-bolder text-white d-block d-md-none">KlikVoting</h1>
+                        <h3 class="text-white mb-2 mt-md-7 mt-4">Login Voting</h3>
                         <p class="text-lead text-white">Pastikan data kegiatan voting di bawah merupakan tujuan Anda</p>
                     </div>
                 </div>
