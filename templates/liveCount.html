@@ -292,7 +292,7 @@
             data: [
                 {% if votingCounts != None %}
                 {% for votingCount in votingCounts: %}
-                '{{votingCount['result']}}'
+                '{{(votingCount['result']).replace('&amp;', '&')}}'
                 {{', ' if not loop.last}}
                 {% endfor %}
                 {% endif %}
