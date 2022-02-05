@@ -3,7 +3,8 @@
 
 <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
     <!-- Navbar -->
-    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+        navbar-scroll="true">
         <div class="container-fluid py-1 px-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
@@ -18,7 +19,9 @@
                 <ul class="navbar-nav justify-content-end ms-auto">
                     <li class="nav-item d-flex align-items-center">
                         <div class="nav-link text-body font-weight-bold px-0">
-                            <a href="/live-count/{{session['id_voting']}}" class="btn btn-sm bg-gradient-info my-0 ms-0 me-3"><i class="fas fa-chart-pie fs-6 me-2"></i>Live Count</a>
+                            <a href="/live-count/{{session['id_voting']}}"
+                                class="btn btn-sm bg-gradient-info my-0 ms-0 me-3"><i
+                                    class="fas fa-chart-pie fs-6 me-2"></i>Live Count</a>
                         </div>
                     </li>
                     <li class="nav-item d-flex align-items-center">
@@ -27,10 +30,10 @@
                             <span class="d-sm-inline d-none">{{session['name'].capitalize()}}</span>
                         </div>
                     </li>
-                    
+
                     <li class="nav-item px-3 d-flex align-items-center">
-                        <a href="/voting-page/logout/" class="nav-link text-gradient text-danger font-weight-bold px-0">
-                            <i class="fas fa-sign-out-alt me-sm-1"></i>
+                        <a href="/voting-page/logout/" class="nav-link text-danger font-weight-bold px-0">
+                            <i class="fas fa-sign-out-alt me-sm-1 text-danger"></i>
                             <span class="d-sm-inline d-none">Logout</span>
                         </a>
                     </li>
@@ -41,7 +44,8 @@
     <!-- End Navbar -->
 
     <div class="container-fluid">
-        <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('{{url_for('static', filename='images/core/profile3.jpg')}}'); background-position-y: 50%;">
+        <div class="page-header min-height-300 border-radius-xl mt-4"
+            style="background-image: url('{{url_for('static', filename='images/core/profile3.jpg')}}'); background-position-y: 50%;">
         </div>
         <div class="row d-none d-xl-flex">
             <div class="col-xl-6 col-sm-12">
@@ -69,7 +73,8 @@
                             </div>
                             <div class="row mt-2">
                                 <div class="col-auto">
-                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Pelaksanaan Kegiatan</p>
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Pelaksanaan
+                                        Kegiatan</p>
                                     <p class="text-sm text-dark mb-0">{{voting['date_start']}}</p>
                                     <p class="text-sm text-dark mb-0">{{voting['date_end']}}</p>
                                 </div>
@@ -78,7 +83,8 @@
                         <div class="col">
                             <div class="row">
                                 <div class="col">
-                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Deskripsi Kegiatan</p>
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Deskripsi
+                                        Kegiatan</p>
                                     <p class="text-sm text-dark mb-0">{{voting['voting_desc']}}</p>
                                 </div>
                                 <div class="col-auto">
@@ -96,7 +102,10 @@
                                 {% if userData['avatar'] != None: %}
                                 <div class="col-auto">
                                     <div class="avatar avatar-xl position-relative align-middle">
-                                        <img src="/static/images/{{session['role']}}/{{userData['avatar']}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm" id='avatar' type="button" onclick="avatar('{{userData['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
+                                        <img src="/static/images/{{session['role']}}/{{userData['avatar']}}"
+                                            alt="profile_image" class="w-100 border-radius-lg shadow-sm" id='avatar'
+                                            type="button" onclick="avatar('{{userData['avatar']}}')"
+                                            data-bs-toggle="modal" data-bs-target="#modal-avatar">
                                     </div>
                                 </div>
                                 {% endif %}
@@ -111,10 +120,14 @@
                             <div class="row mt-2">
                                 <div class="col pt-1">
                                     {% if userData['description'] != None: %}
-                                    <button type="button" class="btn btn-xs bg-gradient-primary mb-2" onclick="preview('{{userData['description']}}')" data-bs-toggle="modal" data-bs-target="#modal-preview">Deskripsi</button>
+                                    <button type="button" class="btn btn-xs bg-gradient-primary mb-2"
+                                        onclick="preview('{{userData['description']}}')" data-bs-toggle="modal"
+                                        data-bs-target="#modal-preview">Deskripsi</button>
                                     <br>
                                     {% endif %}
-                                    <button type="button" class="btn btn-xs bg-gradient-info mb-0" data-bs-toggle="modal" data-bs-target="#tell-problem">Pertanyaan/Keluhan</button>
+                                    <button type="button" class="btn btn-xs bg-gradient-info mb-0"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#tell-problem">Pertanyaan/Keluhan</button>
                                 </div>
                             </div>
                         </div>
@@ -123,9 +136,12 @@
                                 <table class="table mb-0">
                                     <thead>
                                         <tr>
-                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4">No</th>
-                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Pertanyaan/Keluhan</th>
-                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Tanggapan</th>
+                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4">No
+                                            </th>
+                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">
+                                                Pertanyaan/Keluhan</th>
+                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">
+                                                Tanggapan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -137,12 +153,14 @@
                                             </td>
                                             <td class="text-wrap">
                                                 <p class="text-sm mb-0">{{problem['message']}}</p>
-                                                <p class="text-xxs text-secondary pt-2 mb-0">{{problem['msg_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                                <p class="text-xxs text-secondary pt-2 mb-0">
+                                                    {{problem['msg_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
                                             </td>
                                             <td class="text-wrap">
                                                 {% if problem['respond'] != None: %}
                                                 <p class="text-sm mb-0">{{problem['respond']}}</p>
-                                                <p class="text-xxs text-secondary pt-2 mb-0">{{problem['rsp_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                                <p class="text-xxs text-secondary pt-2 mb-0">
+                                                    {{problem['rsp_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
                                                 {% endif %}
                                             </td>
                                         </tr>
@@ -151,7 +169,8 @@
                                         <tr>
                                             <td colspan="3">
                                                 <div class="align-middle text-center">
-                                                    <p class="text-xs text-secondary mb-0">Tidak ada pertanyaan dan keluhan yang disampaikan</p>
+                                                    <p class="text-xs text-secondary mb-0">Tidak ada pertanyaan dan
+                                                        keluhan yang disampaikan</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -191,7 +210,8 @@
                             </div>
                             <div class="row mt-2">
                                 <div class="col-auto">
-                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Pelaksanaan Kegiatan</p>
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Pelaksanaan
+                                        Kegiatan</p>
                                     <p class="text-sm text-dark mb-0">{{voting['date_start']}}</p>
                                     <p class="text-sm text-dark mb-0">{{voting['date_end']}}</p>
                                 </div>
@@ -200,7 +220,8 @@
                         <div class="col-12">
                             <div class="row">
                                 <div class="col">
-                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Deskripsi Kegiatan</p>
+                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Deskripsi
+                                        Kegiatan</p>
                                     <p class="text-sm text-dark mb-0">{{voting['voting_desc']}}</p>
                                 </div>
                                 <div class="col-auto">
@@ -221,7 +242,10 @@
                                 {% if userData['avatar'] != None: %}
                                 <div class="col-auto">
                                     <div class="avatar avatar-xl position-relative align-middle">
-                                        <img src="/static/images/{{session['role']}}/{{userData['avatar']}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm" id='avatar' type="button" onclick="avatar('{{userData['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
+                                        <img src="/static/images/{{session['role']}}/{{userData['avatar']}}"
+                                            alt="profile_image" class="w-100 border-radius-lg shadow-sm" id='avatar'
+                                            type="button" onclick="avatar('{{userData['avatar']}}')"
+                                            data-bs-toggle="modal" data-bs-target="#modal-avatar">
                                     </div>
                                 </div>
                                 {% endif %}
@@ -236,10 +260,14 @@
                             <div class="row mt-2">
                                 <div class="col pt-1">
                                     {% if userData['description'] != None: %}
-                                    <button type="button" class="btn btn-xs bg-gradient-primary mb-2" onclick="preview('{{userData['description']}}')" data-bs-toggle="modal" data-bs-target="#modal-preview">Deskripsi</button>
+                                    <button type="button" class="btn btn-xs bg-gradient-primary mb-2"
+                                        onclick="preview('{{userData['description']}}')" data-bs-toggle="modal"
+                                        data-bs-target="#modal-preview">Deskripsi</button>
                                     <br>
                                     {% endif %}
-                                    <button type="button" class="btn btn-xs bg-gradient-info mb-0" data-bs-toggle="modal" data-bs-target="#tell-problem">Pertanyaan/Keluhan</button>
+                                    <button type="button" class="btn btn-xs bg-gradient-info mb-0"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#tell-problem">Pertanyaan/Keluhan</button>
                                 </div>
                             </div>
                         </div>
@@ -248,9 +276,12 @@
                                 <table class="table mb-0">
                                     <thead>
                                         <tr>
-                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4">No</th>
-                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Pertanyaan/Keluhan</th>
-                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Tanggapan</th>
+                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4">No
+                                            </th>
+                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">
+                                                Pertanyaan/Keluhan</th>
+                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">
+                                                Tanggapan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -262,12 +293,14 @@
                                             </td>
                                             <td class="text-wrap">
                                                 <p class="text-sm mb-0">{{problem['message']}}</p>
-                                                <p class="text-xxs text-secondary pt-2 mb-0">{{problem['msg_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                                <p class="text-xxs text-secondary pt-2 mb-0">
+                                                    {{problem['msg_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
                                             </td>
                                             <td class="text-wrap">
                                                 {% if problem['respond'] != None: %}
                                                 <p class="text-sm mb-0">{{problem['respond']}}</p>
-                                                <p class="text-xxs text-secondary pt-2 mb-0">{{problem['rsp_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                                                <p class="text-xxs text-secondary pt-2 mb-0">
+                                                    {{problem['rsp_created'].strftime('%d/%m/%Y %I:%M %p')}}</p>
                                                 {% endif %}
                                             </td>
                                         </tr>
@@ -276,7 +309,8 @@
                                         <tr>
                                             <td colspan="3">
                                                 <div class="align-middle text-center">
-                                                    <p class="text-xs text-secondary mb-0">Tidak ada pertanyaan dan keluhan yang disampaikan</p>
+                                                    <p class="text-xs text-secondary mb-0">Tidak ada pertanyaan dan
+                                                        keluhan yang disampaikan</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -335,7 +369,10 @@
                         <div class="row justify-content-center mb-2">
                             <div class="col-auto">
                                 <div class="avatar avatar-xxxl">
-                                    <img src="/static/images/candidate/{{candidate['avatar']}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm" id="avatar" type="button" onclick="candidate('{{candidate['avatar']}}')" data-bs-toggle="modal" data-bs-target="#modal-avatar">
+                                    <img src="/static/images/candidate/{{candidate['avatar']}}" alt="profile_image"
+                                        class="w-100 border-radius-lg shadow-sm" id="avatar" type="button"
+                                        onclick="candidate('{{candidate['avatar']}}')" data-bs-toggle="modal"
+                                        data-bs-target="#modal-avatar">
                                 </div>
                             </div>
                         </div>
@@ -358,7 +395,9 @@
                                 {% if session['status'] == None: %}
                                 {% if event['start'] == True and event['finish'] == False: %}
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn bg-gradient-primary" onclick="vote('{{candidate['id_candidate']}}', '{{candidate['name']}}')" data-bs-toggle="modal" data-bs-target="#vote-candidate">Pilih</button>
+                                <button type="button" class="btn bg-gradient-primary"
+                                    onclick="vote('{{candidate['id_candidate']}}', '{{candidate['name']}}')"
+                                    data-bs-toggle="modal" data-bs-target="#vote-candidate">Pilih</button>
                                 {% endif %}
                                 {% endif %}
                             </div>
@@ -372,7 +411,8 @@
     </div>
 
     <!-- Modal Tell Problem -->
-    <div class="modal fade" id="tell-problem" tabindex="-1" role="dialog" aria-labelledby="modal-respond" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal fade" id="tell-problem" tabindex="-1" role="dialog" aria-labelledby="modal-respond"
+        aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <form method="post">
@@ -385,13 +425,17 @@
                     <div class="modal-body">
                         <p class="text-dark mb-2">Kepada Organizer : {{voting['organizer']}}</p>
                         <div class="form-floating mt-1">
-                            <textarea class="form-control" placeholder="Pertanyaan dan Keluhan" aria-label="Pertanyaan dan Keluhan" aria-describedby="problem-addon" name="problem" style="height: 6rem" required></textarea>
+                            <textarea class="form-control" placeholder="Pertanyaan dan Keluhan"
+                                aria-label="Pertanyaan dan Keluhan" aria-describedby="problem-addon" name="problem"
+                                style="height: 6rem" required></textarea>
                             <label class="text-muted h6" for="message">Deskripsi pertanyaan/keluhan</label>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn bg-gradient-secondary my-0" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" name="submit" value="tell-problem" class="btn bg-gradient-primary my-0">Kirim</button>
+                        <button type="button" class="btn bg-gradient-secondary my-0"
+                            data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" name="submit" value="tell-problem"
+                            class="btn bg-gradient-primary my-0">Kirim</button>
                     </div>
                 </form>
             </div>
@@ -399,7 +443,8 @@
     </div>
 
     <!-- Modal Deskripsi -->
-    <div class="modal fade" id="modal-preview" tabindex="-1" role="dialog" aria-labelledby="modal-preview" aria-hidden="true">
+    <div class="modal fade" id="modal-preview" tabindex="-1" role="dialog" aria-labelledby="modal-preview"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -412,7 +457,8 @@
     </div>
 
     <!-- Modal Card ID -->
-    <div class="modal fade" id="modal-avatar" tabindex="-1" role="dialog" aria-labelledby="modal-avatar" aria-hidden="true">
+    <div class="modal fade" id="modal-avatar" tabindex="-1" role="dialog" aria-labelledby="modal-avatar"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -429,7 +475,8 @@
     </div>
 
     <!-- Modal Vote -->
-    <div class="modal fade" id="vote-candidate" tabindex="-1" role="dialog" aria-labelledby="vote-candidate" aria-hidden="true">
+    <div class="modal fade" id="vote-candidate" tabindex="-1" role="dialog" aria-labelledby="vote-candidate"
+        aria-hidden="true">
         <div class="modal-dialog modal-sm modal modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -439,8 +486,10 @@
                             <div class="col-auto">
                                 <p>Pilih <span class="text-dark font-weight-bolder" id="candidate-name"></span> ?</p>
                                 <div class="text-center">
-                                    <button type="submit" name="submit" value="vote-candidate" class="btn btn-sm bg-gradient-primary my-0">Ya</button>
-                                    <button type="button" class="btn btn-sm bg-gradient-secondary ms-1  my-0" data-bs-dismiss="modal">Tidak</button>
+                                    <button type="submit" name="submit" value="vote-candidate"
+                                        class="btn btn-sm bg-gradient-primary my-0">Ya</button>
+                                    <button type="button" class="btn btn-sm bg-gradient-secondary ms-1  my-0"
+                                        data-bs-dismiss="modal">Tidak</button>
                                 </div>
                             </div>
                         </div>
@@ -456,7 +505,8 @@
             <div class="row">
                 <div class="col-8 mx-auto text-center mt-1">
                     <p class="mb-0 text-secondary">
-                        Copyright © <script>
+                        Copyright ©
+                        <script>
                             document.write(new Date().getFullYear())
 
                         </script> <i class="fa fa-heart"></i> <span class="font-weight-bold">KlikVoting Web App</span>
