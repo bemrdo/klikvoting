@@ -274,68 +274,67 @@
             labels: [
                 {% if votingCounts != None %}
                 {% for votingCount in votingCounts: %}
-    '{{votingCount['name']}}'
-    { { ', ' if not loop.last } }
-    {% endfor %}
-    {% endif %}
+                '{{votingCount['name']}}' {{', ' if not loop.last}}
+                {% endfor %}
+                {% endif %}
             ],
-    datasets: [{
-        label: "Live Count",
-        weight: 9,
-        cutout: 0,
-        tension: 0.9,
-        pointRadius: 2,
-        borderWidth: 2,
-        backgroundColor: ['#4878d0', '#ee854a', '#6acc64', '#d65f5f', '#956cb4', '#8c613c', '#dc7ec0', '#797979', '#d5bb67', '#82c6e2'],
-        data: [
-            {% if votingCounts != None %}
-                    {% for votingCount in votingCounts: %}
-    '{{votingCount['result']}}'
-    { { ', ' if not loop.last } }
-    {% endfor %}
-    {% endif %}
-                ],
-    fill: false
-            }],
-        },
-    options: {
-        responsive: true,
+        datasets: [{
+            label: "Live Count",
+            weight: 9,
+            cutout: 0,
+            tension: 0.9,
+            pointRadius: 2,
+            borderWidth: 2,
+            backgroundColor: ['#4878d0', '#ee854a', '#6acc64', '#d65f5f', '#956cb4', '#8c613c', '#dc7ec0', '#797979', '#d5bb67', '#82c6e2'],
+            data: [
+                {% if votingCounts != None %}
+                {% for votingCount in votingCounts: %}
+                '{{votingCount['result']}}'
+                {{', ' if not loop.last}}
+                {% endfor %}
+                {% endif %}
+                    ],
+        fill: false
+                }],
+            },
+        options: {
+            responsive: true,
             maintainAspectRatio: false,
-                plugins: {
-            legend: {
-                display: true,
+            plugins: {
+                legend: {
+                    display: true,
                     position: 'right',
-                }
-        },
-        interaction: {
-            intersect: false,
-                mode: 'index',
-            },
-        scales: {
-            y: {
-                grid: {
-                    drawBorder: false,
-                        display: false,
-                            drawOnChartArea: false,
-                                drawTicks: false,
-                    },
-                ticks: {
-                    display: false
-                }
-            },
-            x: {
-                grid: {
-                    drawBorder: false,
-                        display: false,
-                            drawOnChartArea: false,
-                                drawTicks: false,
-                    },
-                ticks: {
-                    display: false,
                     }
             },
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            },
+            scales: {
+                y: {
+                    grid: {
+                        drawBorder: false,
+                        display: false,
+                        drawOnChartArea: false,
+                        drawTicks: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                x: {
+                    grid: {
+                        drawBorder: false,
+                        display: false,
+                        drawOnChartArea: false,
+                        drawTicks: false,
+                    },
+                    ticks: {
+                        display: false,
+                    }
+                },
+            },
         },
-    },
     });
 
 </script>
