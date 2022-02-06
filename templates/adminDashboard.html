@@ -316,6 +316,7 @@
 <script src="{{url_for('static', filename='styles/js/fullcalendar.min.js')}}"></script>
 
 <script>
+    console.log(document.querySelectorAll("#calendar"));
     var calendar = new FullCalendar.Calendar(document.querySelectorAll("#calendar"), {
         initialView: "dayGridMonth",
         headerToolbar: {
