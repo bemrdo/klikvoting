@@ -139,8 +139,8 @@
             </div>
         </div>
 
-        <!-- Calendar -->
-        <div class="row mt-4 d-none d-lg-block">
+        <!-- Calendar Desktop -->
+        <div class="row mt-4 d-none d-xl-flex">
             <div class="col max-height-vh-cal width-cal-admin">
                 <div class="row">
                     <div class="col-12">
@@ -220,7 +220,90 @@
                 </div>
             </div>
         </div>
-        <!-- End of Calendar -->
+        <!-- End of Calendar Desktop -->
+
+        <!-- Calendar Mobile -->
+        <div class="row mt-4 d-block d-xl-none">
+            <div class="col max-height-vh-cal width-cal-admin">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-calendar">
+                            <div class="card-body p-3">
+                                <div class="calendar fc fc-media-screen fc-direction-ltr fc-theme-standard" data-bs-toggle="calendar" id="calendar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="card max-height-vh-cal width-cal-voting">
+                    <div class="card-header pb-0">
+                        <h6>Daftar Kegiatan Voting</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-4 fit"></th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Organizer</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder ps-2">Kegiatan Voting</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center">Tanggal</th>
+                                        <th class="text-secondary fit"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if votingDetails != None: %}
+                                    {% for votingDetail in votingDetails: %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-inline-flex ps-2 pe-0 py-1">
+                                                <div class="icon icon-sm icon-shape {{'bg-gradient-dark' if votingDetail['date_end'] < now else ('bg-gradient-warning' if votingDetail['date_start'] > now else 'bg-gradient-success')}} shadow text-center border-radius-md">
+                                                    {% if votingDetail['date_end'] < now: %}
+                                                    <i class="fas fa-calendar-check fs-7"></i>
+                                                    {% elif votingDetail['date_start'] > now: %}
+                                                    <i class="fas fa-calendar-times fs-7"></i>
+                                                    {% else: %}
+                                                    <i class="fas fa-calendar fs-7"></i>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-wrap min-width-150">
+                                            <h6 class="mb-0 text-sm">{{votingDetail['organizer']}}</h6>
+                                            <p class="text-xs text-secondary mb-0">{{votingDetail['email']}}</p>
+                                        </td>
+                                        <td class="text-wrap">
+                                            <p class="text-sm font-weight-bold mb-0 text-dark">{{votingDetail['name']}}</p>
+                                            <p class="text-xs text-secondary mb-0">{{votingDetail['institution']}}</p>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="text-secondary text-xs font-weight-bold">
+                                                {{votingDetail['date_start'].strftime('%d/%m/%Y')}} - {{votingDetail['date_end'].strftime('%d/%m/%Y')}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="/admin/voting/{{votingDetail['id_voting']}}" class="btn btn-xs bg-gradient-info mb-0">Detail</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else: %}
+                                    <tr>
+                                        <td colspan="4">
+                                            <div class="align-middle text-center">
+                                                <p class="text-xs text-secondary mb-0">Data Voting tidak ditemukan</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Calendar Mobile -->
     </div>
 </main>
 
