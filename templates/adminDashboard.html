@@ -316,61 +316,57 @@
 <script src="{{url_for('static', filename='styles/js/fullcalendar.min.js')}}"></script>
 
 <script>
-    var oke = (document.querySelectorAll("#calendar"));
-    oke.forEach(myFunc);
-    console.log(document.getElementById("calendar"));
+    var calendars = (document.querySelectorAll("#calendar"));
+    calendars.forEach(myFunc);
     function myFunc(item, index) {
-        console.log(item);
+        var calendar = new FullCalendar.Calendar(item, {
+            initialView: "dayGridMonth",
+            headerToolbar: {
+                start: 'title', // will normally be on the left. if RTL, will be on the right
+                center: '',
+                end: 'today prev,next' // will normally be on the right. if RTL, will be on the left
+            },
+            selectable: false,
+            editable: false,
+            initialDate: moment().format('YYYY-MM-DD'),
+            events: [
+                {% if votingDetails != None %}
+                {% for votingDetail in votingDetails: %}
+                {
+                    title: '{{votingDetail['name']}}',
+                    start: moment('{{votingDetail['date_start']}}').format('YYYY-MM-DD'),
+                    end: moment(moment('{{votingDetail['date_end']}}').add(1, 'days')).format('YYYY-MM-DD'),
+                    className: '{{'bg-gradient-dark' if votingDetail['date_end'] < now else ('bg-gradient-warning' if votingDetail['date_start'] > now else 'bg-gradient-success')}}'
+                },
+                {% endfor %}
+                {% endif %}
+            ],
+            views: {
+                month: {
+                    titleFormat: {
+                        month: "long",
+                        year: "numeric"
+                    }
+                },
+                agendaWeek: {
+                    titleFormat: {
+                        month: "long",
+                        year: "numeric",
+                        day: "numeric"
+                    }
+                },
+                agendaDay: {
+                    titleFormat: {
+                        month: "short",
+                        year: "numeric",
+                        day: "numeric"
+                    }
+                }
+            },
+        });
+
+        calendar.render();
     }
-
-
-    var calendar = new FullCalendar.Calendar(document.getElementById("calendar"), {
-        initialView: "dayGridMonth",
-        headerToolbar: {
-            start: 'title', // will normally be on the left. if RTL, will be on the right
-            center: '',
-            end: 'today prev,next' // will normally be on the right. if RTL, will be on the left
-        },
-        selectable: false,
-        editable: false,
-        initialDate: moment().format('YYYY-MM-DD'),
-        events: [
-            {% if votingDetails != None %}
-            {% for votingDetail in votingDetails: %}
-            {
-                title: '{{votingDetail['name']}}',
-                start: moment('{{votingDetail['date_start']}}').format('YYYY-MM-DD'),
-                end: moment(moment('{{votingDetail['date_end']}}').add(1, 'days')).format('YYYY-MM-DD'),
-                className: '{{'bg-gradient-dark' if votingDetail['date_end'] < now else ('bg-gradient-warning' if votingDetail['date_start'] > now else 'bg-gradient-success')}}'
-            },
-            {% endfor %}
-            {% endif %}
-        ],
-        views: {
-            month: {
-                titleFormat: {
-                    month: "long",
-                    year: "numeric"
-                }
-            },
-            agendaWeek: {
-                titleFormat: {
-                    month: "long",
-                    year: "numeric",
-                    day: "numeric"
-                }
-            },
-            agendaDay: {
-                titleFormat: {
-                    month: "short",
-                    year: "numeric",
-                    day: "numeric"
-                }
-            }
-        },
-    });
-
-    calendar.render();
 
 </script>
 
