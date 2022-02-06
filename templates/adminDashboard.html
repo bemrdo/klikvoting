@@ -316,10 +316,14 @@
 <script src="{{url_for('static', filename='styles/js/fullcalendar.min.js')}}"></script>
 
 <script>
-    // var oke = (document.querySelectorAll("#calendar"));
-    // oke.forEach(console.log(myFunc);
+    var oke = (document.querySelectorAll("#calendar"));
+    oke.forEach(console.log(myFunc);
     console.log(document.getElementById("calendar"));
-    // function myFunc
+    function myFunc(item, index) {
+        console.log(item);
+    }
+
+
     var calendar = new FullCalendar.Calendar(document.getElementById("calendar"), {
         initialView: "dayGridMonth",
         headerToolbar: {
