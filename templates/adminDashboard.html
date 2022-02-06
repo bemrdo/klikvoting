@@ -316,9 +316,11 @@
 <script src="{{url_for('static', filename='styles/js/fullcalendar.min.js')}}"></script>
 
 <script>
-    var oke = (document.querySelectorAll("#calendar"));
-    oke.forEach(console.log(oke[index]));
-    var calendar = new FullCalendar.Calendar(document.querySelectorAll("#calendar"), {
+    // var oke = (document.querySelectorAll("#calendar"));
+    // oke.forEach(console.log(myFunc);
+
+    // function myFunc
+    var calendar = new FullCalendar.Calendar(document.getElementById("calendar"), {
         initialView: "dayGridMonth",
         headerToolbar: {
             start: 'title', // will normally be on the left. if RTL, will be on the right
