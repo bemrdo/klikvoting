@@ -264,7 +264,7 @@
             labels: [
                 {% if votingCounts != None %}
                 {% for votingCount in votingCounts: %}
-                '{{votingCount['name']}}'
+                '{{(votingCount['name']).replace("&", "-")}}'
                 {{', ' if not loop.last}}
                 {% endfor %}
                 {% endif %}
