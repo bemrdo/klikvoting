@@ -7,61 +7,63 @@
     <div class="container-fluid">
         <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('{{url_for('static', filename='images/core/profile3.jpg')}}'); background-position-y: 50%;">
         </div>
-        <div class="card card-body blur shadow-blur mx-4 mt-n55 overflow-hidden">
+        <div class="mt-n12 mt-lg-0">
+          <div class="card card-body blur shadow-blur mx-md-4 mt-n55 overflow-hidden">
             <div class="row">
-                <div class="col">
-                    <div class="h-100">
-                        <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">
-                            {{votingDetail['id_voting']}}
-                            {% if votingDetail['date_start'] > now: %}
-                            <span class="badge bg-gradient-warning text-xxs">Nonaktif</span>
-                            {% elif votingDetail['date_end'] < now: %}
-                            <span class="badge bg-gradient-dark text-xxs">Selesai</span>
-                            {% else: %}
-                            <span class="badge bg-gradient-success text-xxs">Aktif</span>
-                            {% endif %}
-                        </p>
-                        <h5 class="mb-1">
-                            {{votingDetail['name']}}
-                        </h5>
-                    </div>
+              <div class="col">
+                <div class="h-100">
+                  <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">
+                    {{votingDetail['id_voting']}}
+                    {% if votingDetail['date_start'] > now: %}
+                    <span class="badge bg-gradient-warning text-xxs">Nonaktif</span>
+                    {% elif votingDetail['date_end'] < now: %}
+                    <span class="badge bg-gradient-dark text-xxs">Selesai</span>
+                    {% else: %}
+                    <span class="badge bg-gradient-success text-xxs">Aktif</span>
+                    {% endif %}
+                  </p>
+                  <h5 class="mb-1">
+                    {{votingDetail['name']}}
+                  </h5>
                 </div>
-                <div class="col-9 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+              </div>
+              <div class="col-9 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+                <div class="row">
+                  <div class="col">
+                    <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Deskripsi Kegiatan</p>
+                    <p class="text-sm text-dark mb-0">{{votingDetail['voting_desc']}}</p>
+                  </div>
+                  <div class="col-auto">
                     <div class="row">
-                        <div class="col">
-                            <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Deskripsi Kegiatan</p>
-                            <p class="text-sm text-dark mb-0">{{votingDetail['voting_desc']}}</p>
-                        </div>
-                        <div class="col-auto">
-                            <div class="row">
-                                <div class="col-auto">
-                                    <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Akses Viewer</p>
-                                    <p class="text-sm text-dark mb-0">{{'Diijinkan' if votingDetail['viewer'] == 'on' else 'Tidak diijinkan'}}</p>
-                                </div>
-                                <div class="col-auto text-center">
-                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Mulai - Selesai</p>
-                                    <p class="text-sm text-dark mb-0">{{votingDetail['date_start'].strftime('%d/%m/%Y %I:%M %p')}}</p>
-                                    <p class="text-sm text-dark mb-0">{{votingDetail['date_end'].strftime('%d/%m/%Y %I:%M %p')}}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-auto text-center">
-                            <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Validasi Terakhir</p>
-                            <p class="text-sm text-dark mb-0">{{votingDetail['last_checked'].strftime('%d/%m/%Y %I:%M %p')}}</p>
-                        </div>
-                        <div class="col-auto">
-                            <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1"></p>
-                            <a href="/validate/voting/{{votingDetail['id_voting']}}/" class="btn bg-gradient-success mb-0 me-1">Validasi</a>
-                            {% if votingDetail['date_end'] < now: %}
-                            <a href="/report/voting/{{votingDetail['id_voting']}}/" class="btn bg-gradient-primary mb-0">Cetak Laporan</a>
-                            {% else: %}
-                            <a href="#" class="btn bg-gradient-secondary mb-0 disabled" tabindex="-1" role="button" aria-disabled="true">Cetak Laporan</a>
-                            {% endif %}
-                            <p class="text-secondary fst-italic text-xs mb-0 pt-2">*Cetak laporan dapat dilakukan <br> setelah kegiatan selesai</p>
-                        </div>
+                      <div class="col-auto">
+                        <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Akses Viewer</p>
+                        <p class="text-sm text-dark mb-0">{{'Diijinkan' if votingDetail['viewer'] == 'on' else 'Tidak diijinkan'}}</p>
+                      </div>
+                      <div class="col-auto text-center">
+                        <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Mulai - Selesai</p>
+                        <p class="text-sm text-dark mb-0">{{votingDetail['date_start'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                        <p class="text-sm text-dark mb-0">{{votingDetail['date_end'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                      </div>
                     </div>
+                  </div>
+                  <div class="col-auto text-center">
+                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Validasi Terakhir</p>
+                    <p class="text-sm text-dark mb-0">{{votingDetail['last_checked'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                  </div>
+                  <div class="col-auto">
+                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1"></p>
+                    <a href="/validate/voting/{{votingDetail['id_voting']}}/" class="btn bg-gradient-success mb-2 mb-lg-0 me-1">Validasi</a>
+                    {% if votingDetail['date_end'] < now: %}
+                    <a href="/report/voting/{{votingDetail['id_voting']}}/" class="btn bg-gradient-primary mb-2 mb-lg-0">Cetak Laporan</a>
+                    {% else: %}
+                    <a href="#" class="btn bg-gradient-secondary mb-2 mb-lg-0 disabled" tabindex="-1" role="button" aria-disabled="true">Cetak Laporan</a>
+                    {% endif %}
+                    <p class="text-secondary fst-italic text-xs mb-0 pt-2">*Cetak laporan dapat dilakukan <br> setelah kegiatan selesai</p>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
     </div>
     <div class="container-fluid pt-4">
