@@ -7,77 +7,79 @@
     <div class="container-fluid">
         <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('{{url_for('static', filename='images/core/profile.jpg')}}'); background-position-y: 50%;">
         </div>
-        <div class="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
+        <div class="mt-n12 mt-lg-0">
+          <div class="card card-body blur shadow-blur mx-md-4 mt-n6 overflow-hidden">
             <div class="row">
-                <div class="col-auto">
-                    <div class="avatar avatar-xl position-relative align-middle">
-                        <img src="/static/images/card_id/{{userDetail['card_id']}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm" id='card_id' type="button" onclick="card_id('{{userDetail['card_id']}}')" data-bs-toggle="modal" data-bs-target="#modal-cardid">
-                    </div>
+              <div class="col-auto">
+                <div class="avatar avatar-xl position-relative align-middle">
+                  <img src="/static/images/card_id/{{userDetail['card_id']}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm" id='card_id' type="button" onclick="card_id('{{userDetail['card_id']}}')" data-bs-toggle="modal" data-bs-target="#modal-cardid">
                 </div>
-                <div class="col my-auto">
-                    <div class="h-100">
-                        <h5 class="mb-1">
-                            {{userDetail['name']}}
-                        </h5>
-                        <p class="mb-0 text-dark font-weight-bold text-sm">
-                            {{userDetail['institution']}}
-                        </p>
-                        {% if userDetail['status'] == 'approved': %}
-                        <span class="badge bg-gradient-success text-xxs">Diterima</span>
-                        {% elif userDetail['status'] == 'disproved': %}
-                        <span class="badge bg-gradient-danger text-xxs">Ditolak</span>
-                        <p class="text-sm text-secondary mb-0">{{userDetail['message']}}</p>
-                        {% elif userDetail['status'] == 'pending' %}
-                        <span class="badge bg-gradient-warning text-xxs">Menunggu Konfirmasi</span>
-                        {% elif userDetail['status'] == 'inactived' %}
-                        <span class="badge bg-gradient-danger text-xxs">Nonaktif</span>
-                        {% endif %}
-                    </div>
+              </div>
+              <div class="col my-auto">
+                <div class="h-100">
+                  <h5 class="mb-1">
+                    {{userDetail['name']}}
+                  </h5>
+                  <p class="mb-0 text-dark font-weight-bold text-sm">
+                    {{userDetail['institution']}}
+                  </p>
+                  {% if userDetail['status'] == 'approved': %}
+                  <span class="badge bg-gradient-success text-xxs">Diterima</span>
+                  {% elif userDetail['status'] == 'disproved': %}
+                  <span class="badge bg-gradient-danger text-xxs">Ditolak</span>
+                  <p class="text-sm text-secondary mb-0">{{userDetail['message']}}</p>
+                  {% elif userDetail['status'] == 'pending' %}
+                  <span class="badge bg-gradient-warning text-xxs">Menunggu Konfirmasi</span>
+                  {% elif userDetail['status'] == 'inactived' %}
+                  <span class="badge bg-gradient-danger text-xxs">Nonaktif</span>
+                  {% endif %}
                 </div>
-                <div class="col-9 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+              </div>
+              <div class="col-9 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+                <div class="row">
+                  <div class="col-auto">
+                    <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Kontak</p>
+                    <p class="text-sm text-dark font-weight-bold mb-0">{{userDetail['email']}}</p>
+                    <p class="text-sm text-dark mb-0">{{userDetail['number']}}</p>
+                  </div>
+                  <div class="col">
+                    <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Alamat</p>
+                    <p class="text-sm text-dark mb-0">{{userDetail['address']}}</p>
+                  </div>
+                  <div class="col-auto">
                     <div class="row">
-                        <div class="col-auto">
-                            <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Kontak</p>
-                            <p class="text-sm text-dark font-weight-bold mb-0">{{userDetail['email']}}</p>
-                            <p class="text-sm text-dark mb-0">{{userDetail['number']}}</p>
-                        </div>
-                        <div class="col">
-                            <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Alamat</p>
-                            <p class="text-sm text-dark mb-0">{{userDetail['address']}}</p>
-                        </div>
-                        <div class="col-auto">
-                            <div class="row">
-                                <div class="col-auto">
-                                    <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Total Voting</p>
-                                    <p class="text-sm text-dark mb-0"><span class="font-weight-bolder">{{voting['total']}}</span> kegiatan</p>
-                                </div>
-                                <div class="col-auto">
-                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Voting Nonaktif</p>
-                                    <p class="text-sm text-dark mb-0"><span class="font-weight-bolder">{{voting['disactive']}}</span> kegiatan</p>
-                                </div>
-                                <div class="col-auto">
-                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Voting Aktif</p>
-                                    <p class="text-sm text-dark mb-0"><span class="font-weight-bolder">{{voting['active']}}</span> kegiatan</p>
-                                </div>
-                                <div class="col-auto">
-                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Voting Selesai</p>
-                                    <p class="text-sm text-dark mb-0"><span class="font-weight-bolder">{{voting['finish']}}</span> kegiatan</p>
-                                </div>
-                                <div class="col-auto">
-                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1"></p>
-                                    <a href="/admin/organizer/delete/{{userDetail['id_user']}}/" class="btn bg-gradient-danger mb-2">Hapus Akun</a>
-                                    <br>
-                                    {% if userDetail['status'] == 'inactived' %}
-                                    <a href="/admin/organizer/active/{{userDetail['id_user']}}" class="btn bg-gradient-info mb-0">Aktifkan</a>
-                                    {% elif userDetail['status'] == 'approved' %}
-                                    <a href="/admin/organizer/inactive/{{userDetail['id_user']}}" class="btn bg-gradient-warning mb-0">Nonaktifkan</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
+                      <div class="col-auto">
+                        <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Total Voting</p>
+                        <p class="text-sm text-dark mb-0"><span class="font-weight-bolder">{{voting['total']}}</span> kegiatan</p>
+                      </div>
+                      <div class="col-auto">
+                        <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Voting Nonaktif</p>
+                        <p class="text-sm text-dark mb-0"><span class="font-weight-bolder">{{voting['disactive']}}</span> kegiatan</p>
+                      </div>
+                      <div class="col-auto">
+                        <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Voting Aktif</p>
+                        <p class="text-sm text-dark mb-0"><span class="font-weight-bolder">{{voting['active']}}</span> kegiatan</p>
+                      </div>
+                      <div class="col-auto">
+                        <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Voting Selesai</p>
+                        <p class="text-sm text-dark mb-0"><span class="font-weight-bolder">{{voting['finish']}}</span> kegiatan</p>
+                      </div>
+                      <div class="col-auto">
+                        <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1"></p>
+                        <a href="/admin/organizer/delete/{{userDetail['id_user']}}/" class="btn bg-gradient-danger mb-2">Hapus Akun</a>
+                        <br>
+                        {% if userDetail['status'] == 'inactived' %}
+                        <a href="/admin/organizer/active/{{userDetail['id_user']}}" class="btn bg-gradient-info mb-0">Aktifkan</a>
+                        {% elif userDetail['status'] == 'approved' %}
+                        <a href="/admin/organizer/inactive/{{userDetail['id_user']}}" class="btn bg-gradient-warning mb-0">Nonaktifkan</a>
+                        {% endif %}
+                      </div>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
     </div>
     <div class="container-fluid py-4">
