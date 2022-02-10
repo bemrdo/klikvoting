@@ -672,7 +672,7 @@ def get_report(id):
     votingDetail = get_voting(id)
     votingCounts = get_count(id)
     cur = mysql.connection.cursor()
-    resultValue = cur.execute("SELECT h.id_hash, h.encrypted, h.created_at, h.role, h.status, v_name FROM h_{} h LEFT JOIN v_{} v on h.id_hash = v.status".format(id, id))
+    resultValue = cur.execute("SELECT h.id_hash, h.encrypted, h.created_at, h.role, h.status, v.name FROM h_{} h LEFT JOIN v_{} v on h.id_hash = v.status".format(id, id))
     if resultValue > 0:
         votingReports = cur.fetchall()
     else:
