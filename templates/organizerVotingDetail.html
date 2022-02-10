@@ -286,7 +286,7 @@
                                         </td>
                                         <td class="pe-3 text-end">
                                             <button type="button" class="btn btn-xs bg-gradient-secondary mb-0" onclick="editCandidate('{{votingCandidate['id_candidate']}}')" data-bs-toggle="modal" data-bs-target="#edit-candidate">Edit</button>
-                                            {% if votingCandidate['status'] == 'blocked' || votingCandidate['status'] == None: %}
+                                            {% if votingCandidate['status'] == 'blocked' or votingCandidate['status'] == None: %}
                                             <br>
                                             <a href="/organizer/voting/{{votingCandidate['id_voting']}}/candidate/delete/{{votingCandidate['id_candidate']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-1">Hapus</a>
                                             {% endif %}
