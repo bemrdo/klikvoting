@@ -128,7 +128,9 @@
                                         </td>
                                         {% endif %}
                                         <td class="pe-3">
+                                            {% if votingCandidate['status'] == 'blocked' or votingCandidate['status'] == None: %}
                                             <a href="/admin/voting/{{votingCandidate['id_voting']}}/candidate/delete/{{votingCandidate['id_candidate']}}" class="btn btn-xs bg-gradient-danger mb-0">Hapus</a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -212,7 +214,9 @@
                                         </td>
                                         {% endif %}
                                         <td class="pe-3">
+                                            {% if votingVoter['status'] == 'blocked' or votingVoter['status'] == None: %}
                                             <a href="/admin/voting/{{votingVoter['id_voting']}}/voter/delete/{{votingVoter['id_voter']}}" class="btn btn-xs bg-gradient-danger mb-0">Hapus</a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                     {% endfor %}
