@@ -8,80 +8,82 @@
         <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('{{url_for('static', filename='images/core/profile2.jpg')}}'); background-position-y: 50%;">
         </div>
         <div class="card card-body blur shadow-blur mx-4 mt-n95 overflow-hidden">
-            <div class="row min-height-100">
-                <div class="col my-sm-auto">
-                    <div>
-                        <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">
-                            {{votingDetail['id_voting']}}
-                            {% if votingDetail['date_start'] > now: %}
-                            <span class="badge bg-gradient-warning text-xxs">Nonaktif</span>
-                            {% elif votingDetail['date_end'] < now: %}
-                            <span class="badge bg-gradient-dark text-xxs">Selesai</span>
-                            {% else: %}
-                            <span class="badge bg-gradient-success text-xxs">Aktif</span>
-                            {% endif %}
-                        </p>
-                        <h5 class="mb-1">
-                            {{votingDetail['name']}}
-                        </h5>
-                    </div>
-                </div>
-                <div class="col-8 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
-                    <div class="row">
-                        <div class="col">
-                            <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Deskripsi Kegiatan</p>
-                            <p class="text-sm text-dark mb-0">{{votingDetail['voting_desc']}}</p>
-                        </div>
-                        <div class="col-auto">
-                            <div class="row">
-                                <div class="col-auto">
-                                    <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Akses Viewer</p>
-                                    <p class="text-sm text-dark mb-0">{{'Diijinkan' if votingDetail['viewer'] == 'on' else 'Tidak diijinkan'}}</p>
-                                </div>
-                                <div class="col-auto text-center">
-                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Mulai - Selesai</p>
-                                    <p class="text-sm text-dark mb-0">{{votingDetail['date_start'].strftime('%d/%m/%Y %I:%M %p')}}</p>
-                                    <p class="text-sm text-dark mb-0">{{votingDetail['date_end'].strftime('%d/%m/%Y %I:%M %p')}}</p>
-                                </div>
-                                <div class="col-auto text-end">
-                                    <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1"></p>
-                                    <a href="/organizer/voting/report/{{votingDetail['id_voting']}}/" class="btn bg-gradient-info mb-0 me-1">Hasil Voting</a>
-                                    <a href="/organizer/voting/delete/{{votingDetail['id_voting']}}/" class="btn bg-gradient-danger mb-0">Hapus Voting</a>
-                                    <br>
-                                    <button type="button" class="btn bg-gradient-secondary mb-0 mt-2" data-bs-toggle="modal" data-bs-target="#edit-voting" onclick="edit('{{votingDetail['id_voting']}}')">Edit Voting</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          <div class="row min-height-100">
+            <div class="col my-sm-auto">
+              <div>
+                <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">
+                  {{votingDetail['id_voting']}}
+                  {% if votingDetail['date_start'] > now: %}
+                  <span class="badge bg-gradient-warning text-xxs">Nonaktif</span>
+                  {% elif votingDetail['date_end'] < now: %}
+                  <span class="badge bg-gradient-dark text-xxs">Selesai</span>
+                  {% else: %}
+                  <span class="badge bg-gradient-success text-xxs">Aktif</span>
+                  {% endif %}
+                </p>
+                <h5 class="mb-1">
+                  {{votingDetail['name']}}
+                </h5>
+              </div>
             </div>
+            <div class="col-lg-8 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+              <div class="row">
+                <div class="col">
+                  <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Deskripsi Kegiatan</p>
+                  <p class="text-sm text-dark mb-0">{{votingDetail['voting_desc']}}</p>
+                </div>
+                <div class="col-auto">
+                  <div class="row">
+                    <div class="col-auto">
+                      <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Akses Viewer</p>
+                      <p class="text-sm text-dark mb-0">{{'Diijinkan' if votingDetail['viewer'] == 'on' else 'Tidak diijinkan'}}</p>
+                    </div>
+                    <div class="col-auto text-center">
+                      <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1">Mulai - Selesai</p>
+                      <p class="text-sm text-dark mb-0">{{votingDetail['date_start'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                      <p class="text-sm text-dark mb-0">{{votingDetail['date_end'].strftime('%d/%m/%Y %I:%M %p')}}</p>
+                    </div>
+                    <div class="col-auto text-center text-lg-end">
+                      <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1"></p>
+                      <a href="/organizer/voting/report/{{votingDetail['id_voting']}}/" class="btn bg-gradient-info mb-2 mb-lg-0 me-lg-1">Hasil Voting</a>
+                      <a href="/organizer/voting/delete/{{votingDetail['id_voting']}}/" class="btn bg-gradient-danger mb-2 mb-lg-0">Hapus Voting</a>
+                      <br>
+                      <button type="button" class="btn bg-gradient-secondary mb-2 mb-lg-0 mt-lg-2" data-bs-toggle="modal" data-bs-target="#edit-voting" onclick="edit('{{votingDetail['id_voting']}}')">Edit Voting</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-n12 mt-lg-0">
         </div>
         <div class="row mt-1">
             <div class="col-auto">
                 <div class="card card-body blur shadow-blur ms-4 mt-2">
-                    <div class="row">
-                        <div class="col-auto pe-1">
+                    <div class="row text-center text-lg-start">
+                        <div class="col-auto mb-2 mb-lg-0 pe-lg-1">
                             <button type="button" class="btn bg-gradient-info mb-0" data-bs-toggle="modal" data-bs-target="#tell-problem">Sampaikan Pertanyaan/Keluhan</button>
                         </div>
-                        <div class="col-auto px-1">
+                        <div class="col-auto mb-2 mb-lg-0 px-lg-1">
                             <button type="button" class="btn bg-gradient-dark mb-0" data-bs-toggle="modal" data-bs-target="#add-candidate">Tambah Candidate</button>
                         </div>
-                        <div class="col-auto ps-1">
+                        <div class="col-auto mb-2 mb-lg-0 ps-lg-1">
                             <button type="button" class="btn bg-gradient-dark mb-0" data-bs-toggle="modal" data-bs-target="#add-voter">Tambah Voter</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col ps-0">
+            <div class="col ps-0 mt-1 mt-lg-0">
                 <div class="card card-body blur shadow-blur me-4 mt-2">
                     <div class="row">
-                        <div class="col">
+                        <div class="col mb-2 mb-lg-0">
                             <div class="input-group bg-white" id="group-link">
                                 <span class="input-group-text text-uppercase text-gradient text-secondary text-sm font-weight-bolder" id="title-link">LINK VOTING :</span>
                                 <input type="text" id="voting-link" class="form-control form-control-alternative bg-white" aria-label="Link Group" aria-describedby="title-link" value="{{request.host_url + 'voting-page/login/' + votingDetail['id_voting']}}" disabled readonly>
                             </div>
                         </div>
-                        <div class="col-auto ps-1 pe-25">
+                        <div class="col-auto ps-lg-1 pe-25">
                             <button type="button" class="btn bg-gradient-success mb-0" onclick="btnLink('{{request.host_url + 'voting-page/login/' + votingDetail['id_voting']}}')">Salin Link Voting</button>
                         </div>
                     </div>
@@ -92,7 +94,7 @@
 
     <div class="container-fluid pt-4">
         <div class="row">
-            <div class="col">
+            <div class="col mb-4 mb-lg-0">
                 <div class="card max-height-vh-table">
                     <div class="card-header pb-0">
                         <h6>Pertanyaan dan Keluhan Organizer</h6>
@@ -216,7 +218,7 @@
 
     <div class="container-fluid py-4">
         <div class="row">
-            <div class="col">
+            <div class="col mb-4 mb-lg-0">
                 <div class="card max-height-vh-vot">
                     <div class="card-header pb-0">
                         <div class="row">
