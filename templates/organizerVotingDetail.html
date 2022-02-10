@@ -376,8 +376,10 @@
                                         </td>
                                         <td class="pe-3 text-end">
                                             <button type="button" class="btn btn-xs bg-gradient-secondary mb-0" onclick="editVoter('{{votingVoter['id_voter']}}')" data-bs-toggle="modal" data-bs-target="#edit-voter">Edit</button>
+                                            {% if votingVoter['status'] == 'blocked' or votingVoter['status'] == None: %}
                                             <br>
                                             <a href="/organizer/voting/{{votingVoter['id_voting']}}/voter/delete/{{votingVoter['id_voter']}}" class="btn btn-xs bg-gradient-danger mb-0 mt-1">Hapus</a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                     {% endfor %}
