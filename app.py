@@ -548,6 +548,13 @@ def registration():
         institution = user['institution']
         created_at = str(datetime.now() + timedelta(hours = 8))
 
+        cur = mysql.connection.cursor()
+        resultValue = cur.execute("SELECT email FROM user WHERE email = %s", [email])
+        if resultValue > 0:
+            flash('Email telah terdaftar, silahkan gunakan email lain', 'danger')
+            return redirect(request.url)
+        cur.close()
+
         if 'card_id' not in request.files:
             flash('Tidak dapat memuat Foto Kartu ID', 'warning')
             return redirect(request.url)
