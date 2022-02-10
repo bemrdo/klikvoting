@@ -33,7 +33,7 @@
                     <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Deskripsi Kegiatan</p>
                     <p class="text-sm text-dark mb-0">{{votingDetail['voting_desc']}}</p>
                   </div>
-                  <div class="col-lg-auto">
+                  <div class="col-auto">
                     <div class="row">
                       <div class="col-auto">
                         <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Akses Viewer</p>
@@ -44,7 +44,7 @@
                         <p class="text-sm text-dark mb-0">{{votingDetail['date_start'].strftime('%d/%m/%Y %I:%M %p')}}</p>
                         <p class="text-sm text-dark mb-0">{{votingDetail['date_end'].strftime('%d/%m/%Y %I:%M %p')}}</p>
                       </div>
-                      <div class="col-auto text-center text-lg-end">
+                      <div class="col-lg-auto text-center text-lg-end">
                         <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1"></p>
                         <a href="/organizer/voting/report/{{votingDetail['id_voting']}}/" class="btn bg-gradient-info mb-2 mb-lg-0 me-lg-1">Hasil Voting</a>
                         <a href="/organizer/voting/delete/{{votingDetail['id_voting']}}/" class="btn bg-gradient-danger mb-2 mb-lg-0">Hapus Voting</a>
@@ -62,13 +62,13 @@
             <div class="col-auto">
                 <div class="card card-body blur shadow-blur ms-lg-4 mt-2">
                     <div class="row">
-                        <div class="col-lg-auto mb-2 mb-lg-0 pe-lg-1">
+                        <div class="col-md-auto mb-2 mb-lg-0 pe-lg-1 text-center">
                             <button type="button" class="btn bg-gradient-info mb-0" data-bs-toggle="modal" data-bs-target="#tell-problem">Sampaikan Pertanyaan/Keluhan</button>
                         </div>
-                        <div class="col-lg-auto mb-2 mb-lg-0 px-lg-1">
+                        <div class="col-md-auto mb-2 mb-lg-0 px-lg-1 text-center">
                             <button type="button" class="btn bg-gradient-dark mb-0" data-bs-toggle="modal" data-bs-target="#add-candidate">Tambah Candidate</button>
                         </div>
-                        <div class="col-lg-auto mb-2 mb-lg-0 ps-lg-1">
+                        <div class="col-md-auto mb-2 mb-lg-0 ps-lg-1 text-center">
                             <button type="button" class="btn bg-gradient-dark mb-0" data-bs-toggle="modal" data-bs-target="#add-voter">Tambah Voter</button>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                                 <input type="text" id="voting-link" class="form-control form-control-alternative bg-white" aria-label="Link Group" aria-describedby="title-link" value="{{request.host_url + 'voting-page/login/' + votingDetail['id_voting']}}" disabled readonly>
                             </div>
                         </div>
-                        <div class="col-auto ps-lg-1 pe-25">
+                        <div class="col-auto ps-xl-1 pe-25">
                             <button type="button" class="btn bg-gradient-success mb-0" onclick="btnLink('{{request.host_url + 'voting-page/login/' + votingDetail['id_voting']}}')">Salin Link Voting</button>
                         </div>
                     </div>
