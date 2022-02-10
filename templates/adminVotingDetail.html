@@ -37,7 +37,7 @@
                     <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Deskripsi Kegiatan</p>
                     <p class="text-sm text-dark mb-0">{{votingDetail['voting_desc']}}</p>
                   </div>
-                  <div class="col-auto">
+                  <div class="col-lg-auto">
                     <div class="row">
                       <div class="col-auto">
                         <p class="text-uppercase text-primary text-sm font-weight-bolder mb-1">Akses Viewer</p>
@@ -48,7 +48,7 @@
                         <p class="text-sm text-dark mb-0">{{votingDetail['date_start'].strftime('%d/%m/%Y %I:%M %p')}}</p>
                         <p class="text-sm text-dark mb-0">{{votingDetail['date_end'].strftime('%d/%m/%Y %I:%M %p')}}</p>
                       </div>
-                      <div class="col-auto">
+                      <div class="col-lg-auto text-center text-md-end">
                         <p class="text-uppercase text-dark text-sm font-weight-bolder mb-1"></p>
                         <a href="/admin/voting/report/{{votingDetail['id_voting']}}/" class="btn bg-gradient-info mb-2 mb-lg-0 me-1">Hasil Voting</a>
                         <a href="/admin/voting/delete/{{votingDetail['id_voting']}}/" class="btn bg-gradient-danger mb-2 mb-lg-0">Hapus Voting</a>
