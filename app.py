@@ -1357,6 +1357,7 @@ def live_count(id):
     return render_template("liveCount.html", core = core, now = now, votingDetail = votingDetail, votingCounts = votingCounts, id_voting = id)
 
 def send_email():
+    organizer_email = 'bemr.do@gmail.com'
     msg = Message(
         subject='Reset Password Akun KlikVoting',
         sender=app.config.get('MAIL_USERNAME'),
