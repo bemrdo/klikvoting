@@ -29,11 +29,11 @@ mysql = MySQL(app)
 
 # configuration of mail
 app.config['MAIL_SERVER']='mail.klikvoting.web.id'
-app.config['MAIL_PORT'] = 465
+app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'reset-password@klikvoting.web.id'
 app.config['MAIL_PASSWORD'] = db['mysql_password']+'resetpassword'
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
 
 
