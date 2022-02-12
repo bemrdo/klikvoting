@@ -517,7 +517,7 @@ def appVotingPageLogout():
 # message object mapped to a particular URL ‘/mail’
 @app.route("/mail")
 def appSendMail():
-    send_mail()
+    send_email()
     flash('Link reset password telah dikirim ke email Anda', 'success')
     return redirect('/')
 
