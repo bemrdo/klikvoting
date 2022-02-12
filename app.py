@@ -516,16 +516,10 @@ def appVotingPageLogout():
 
 # message object mapped to a particular URL ‘/mail’
 @app.route("/mail")
-def sendMail():
-    msg = Message(
-        # subject="Hello",
-        "Hello",
-        sender=app.config.get("MAIL_USERNAME"),
-        recipients=["bemr.do@gmail.com"],
-        body="This is a test email I sent with Gmail and Python!"
-    )
-    mail.send(msg)
-    return msg.sender
+def appSendMail():
+    send_mail()
+    flash('Link reset password telah dikirim ke email Anda', 'success')
+    return redirect('/')
 
 # MAIN FUNCTION ================================================================
 
@@ -1362,6 +1356,16 @@ def live_count(id):
     votingCounts = get_count(id)
     return render_template("liveCount.html", core = core, now = now, votingDetail = votingDetail, votingCounts = votingCounts, id_voting = id)
 
+def send_email():
+    msg = Message(
+        subject='Reset Password Akun KlikVoting',
+        sender=app.config.get('MAIL_USERNAME'),
+        recipients=[organizer_email],
+        # body="This is a test email I sent with Gmail and Python!"
+        html = render_template('emailReset.html')
+    )
+    mail.send(msg)
+    return msg.sender
 
 # SUPPORT FUNCTION =============================================================
 
