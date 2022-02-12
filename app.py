@@ -525,7 +525,7 @@ def sendMail():
         body="This is a test email I sent with Gmail and Python!"
     )
     mail.send(msg)
-    return 'Sent'
+    return msg.sender
 
 # MAIN FUNCTION ================================================================
 
