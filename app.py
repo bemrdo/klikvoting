@@ -28,14 +28,17 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
 # configuration of mail
-app.config['MAIL_SERVER']='mail.klikvoting.web.id'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'reset-password@klikvoting.web.id'
-app.config['MAIL_PASSWORD'] = db['mysql_password']+'resetpassword'
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
-mail = Mail(app)
+mail_settings = {
+    "MAIL_SERVER": 'smtp.gmail.com',
+    "MAIL_PORT": 465,
+    "MAIL_USE_TLS": False,
+    "MAIL_USE_SSL": True,
+    "MAIL_USERNAME": db['email_user'],
+    "MAIL_PASSWORD": db['email_password']
+}
 
+app.config.update(mail_settings)
+mail = Mail(app)
 
 app.config['SECRET_KEY'] = os.urandom(24)
 
@@ -513,15 +516,15 @@ def appVotingPageLogout():
 
 # message object mapped to a particular URL ‘/mail’
 @app.route("/mail")
-def index():
+def sendMail():
    msg = Message(
-                'Hello',
-                sender ='reset-password@klikvting.web.id',
-                recipients = ['bemr.do@gmail.com']
-               )
-   msg.body = 'Hello Flask message sent from Flask-Mail'
-   mail.send(msg)
-   return 'Sent'
+        subject="Hello",
+        sender=app.config.get("MAIL_USERNAME"),
+        recipients=["bemr.do@gmail.com"],
+        body="This is a test email I sent with Gmail and Python!"
+    )
+    mail.send(msg)
+    return 'Sent'
 
 # MAIN FUNCTION ================================================================
 
