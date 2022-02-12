@@ -13,8 +13,11 @@ import hashlib
 from Crypto.Cipher import AES
 from Crypto import Random
 import pdfkit
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
+# instantiate the mail class
+mail = Mail(app)
 
 db = yaml.load(open('db.yaml'))
 app.config['MYSQL_HOST'] = db['mysql_host']
@@ -23,6 +26,16 @@ app.config['MYSQL_PASSWORD'] = db['mysql_password']
 app.config['MYSQL_DB'] = db['mysql_db']
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
+
+# configuration of mail
+app.config['MAIL_SERVER']='mail.klikvoting.web.id'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'reset-password@klikvoting.web.id'
+app.config['MAIL_PASSWORD'] = db['mysql_password']+'resetpassword'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
+
 
 app.config['SECRET_KEY'] = os.urandom(24)
 
@@ -497,6 +510,18 @@ def appVotingPageLogout():
     logout()
     flash('Anda berhasil Logout', 'secondary')
     return redirect('/voting-page/login/')
+
+# message object mapped to a particular URL ‘/mail’
+@app.route("/mail")
+def index():
+   msg = Message(
+                'Hello',
+                sender ='reset-password@klikvting.web.id',
+                recipients = ['bemr.do@gmail.com']
+               )
+   msg.body = 'Hello Flask message sent from Flask-Mail'
+   mail.send(msg)
+   return 'Sent'
 
 # MAIN FUNCTION ================================================================
 
