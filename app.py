@@ -517,13 +517,14 @@ def appVotingPageLogout():
 # message object mapped to a particular URL ‘/mail’
 @app.route("/mail")
 def sendMail():
-    # msg = Message(
-    #     subject="Hello",
-    #     sender=app.config.get("MAIL_USERNAME"),
-    #     recipients=["bemr.do@gmail.com"],
-    #     body="This is a test email I sent with Gmail and Python!"
-    # )
-    # mail.send(msg)
+    msg = Message(
+        # subject="Hello",
+        "Hello",
+        sender=app.config.get("MAIL_USERNAME"),
+        recipients=["bemr.do@gmail.com"],
+        body="This is a test email I sent with Gmail and Python!"
+    )
+    mail.send(msg)
     return 'Sent'
 
 # MAIN FUNCTION ================================================================
