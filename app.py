@@ -524,7 +524,7 @@ def sendMail():
         recipients=["bemr.do@gmail.com"],
         body="This is a test email I sent with Gmail and Python!"
     )
-    mail.send(msg)
+    # mail.send(msg)
     return msg.sender
 
 # MAIN FUNCTION ================================================================
