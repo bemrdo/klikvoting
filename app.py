@@ -508,18 +508,16 @@ def appLiveCount(id):
             flash('Login terlebih dahulu', 'warning')
             return redirect('/voting-page/login/{}/'.format(id))
 
-@app.route('/voting-page/logout/')
+@app.route("/voting-page/logout/")
 def appVotingPageLogout():
     logout()
     flash('Anda berhasil Logout', 'secondary')
     return redirect('/voting-page/login/')
 
-# message object mapped to a particular URL ‘/mail’
-@app.route("/mail")
-def appSendMail():
-    send_email()
-    flash('Link reset password telah dikirim ke email Anda', 'success')
-    return redirect('/')
+@app.route("/mail/<string:email>/")
+def appSendMail(email):
+    organizer_email = email
+    return send_email(organizer_email)
 
 # MAIN FUNCTION ================================================================
 
@@ -1356,17 +1354,17 @@ def live_count(id):
     votingCounts = get_count(id)
     return render_template("liveCount.html", core = core, now = now, votingDetail = votingDetail, votingCounts = votingCounts, id_voting = id)
 
-def send_email():
-    organizer_email = 'bemr.do@gmail.com'
+def send_email(email):
     msg = Message(
         subject='Reset Password Akun KlikVoting',
         sender=app.config.get('MAIL_USERNAME'),
-        recipients=[organizer_email],
-        # body="This is a test email I sent with Gmail and Python!"
+        recipients=[email],
         html = render_template('emailReset.html')
     )
     mail.send(msg)
-    return msg.sender
+
+    flash('Link reset password telah dikirim ke email Anda', 'success')
+    return redirect('/')
 
 # SUPPORT FUNCTION =============================================================
 
