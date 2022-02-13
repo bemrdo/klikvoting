@@ -546,14 +546,15 @@ def login():
         elif user['submit'] == 'request-email':
             organizer_email = user['request_email']
             if (check_email(organizer_email)) :
-                reset_key = generate_id()
+                reset_key = generate_id() + generate_id()
+                reset_key_created = str(datetime.now() + timedelta(hours = 8))
+                time_left = reset_key_created + ' WITA'
                 msg = Message(
-                    subject='Reset Password Akun KlikVoting',
+                    subject='Reset Kata Sandi Akun KlikVoting',
                     sender=app.config.get('MAIL_USERNAME'),
                     recipients=[organizer_email],
-                    html = render_template('emailReset.html', reset_key = reset_key)
+                    html = render_template('emailReset.html', reset_key = reset_key, time_left = time_left)
                 )
-                reset_key_created = str(datetime.now() + timedelta(hours = 8))
                 cur = mysql.connection.cursor()
                 cur.execute("UPDATE user SET reset_key = %s, reset_key_created = %s WHERE email = %s", (reset_key, reset_key_created, organizer_email))
                 mysql.connection.commit()
