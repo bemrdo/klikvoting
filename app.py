@@ -514,38 +514,48 @@ def appVotingPageLogout():
     flash('Anda berhasil Logout', 'secondary')
     return redirect('/voting-page/login/')
 
-@app.route("/mail/<string:email>/")
-def appSendMail(email):
-    organizer_email = email
-    return send_email(organizer_email)
-
 # MAIN FUNCTION ================================================================
 
 def login():
     core = {'title':'Login Organizer'}
     if request.method == 'POST':
-        user = request.form
-        email = user['email']
-        password = user['password']
+        if data['submit'] == 'login':
+            user = request.form
+            email = user['email']
+            password = user['password']
 
-        cur = mysql.connection.cursor()
-        resultValue = cur.execute("SELECT id_user, name, pass, role FROM user WHERE email = %s", [email])
-        if resultValue > 0:
-            loginData = cur.fetchone()
-            cur.close()
-            if check_password_hash(loginData['pass'], password):
-                session['login'] = True
-                session['id_user'] = loginData['id_user']
-                session['role'] = loginData['role']
-                session['name'] = loginData['name']
-                flash('Selamat datang ' + session['name'] + '! Anda berhasil Login', 'secondary')
+            cur = mysql.connection.cursor()
+            resultValue = cur.execute("SELECT id_user, name, pass, role FROM user WHERE email = %s", [email])
+            if resultValue > 0:
+                loginData = cur.fetchone()
+                cur.close()
+                if check_password_hash(loginData['pass'], password):
+                    session['login'] = True
+                    session['id_user'] = loginData['id_user']
+                    session['role'] = loginData['role']
+                    session['name'] = loginData['name']
+                    flash('Selamat datang ' + session['name'] + '! Anda berhasil Login', 'secondary')
+                else:
+                    flash('Email/kata sandi salah!', 'warning')
+                    return render_template('login.html', core = core)
             else:
-                flash('Email/kata sandi salah!', 'warning')
+                flash('Akun tidak ditemukan!', 'warning')
                 return render_template('login.html', core = core)
-        else:
-            flash('Akun tidak ditemukan!', 'warning')
-            return render_template('login.html', core = core)
-        return redirect('/' + session['role'] + '/dashboard/')
+            return redirect('/' + session['role'] + '/dashboard/')
+
+        elif data['submit'] == 'request-email':
+            organizer_email = data['request_email']
+            msg = Message(
+                subject='Reset Password Akun KlikVoting',
+                sender=app.config.get('MAIL_USERNAME'),
+                recipients=[organizer_email],
+                html = render_template('emailReset.html')
+            )
+            mail.send(msg)
+            flash('Link reset password telah dikirim ke email Anda', 'success')
+            return redirect('/')
+
+
     return render_template('login.html', core = core)
 
 def logout():
@@ -1353,18 +1363,6 @@ def live_count(id):
     votingDetail = get_voting(id)
     votingCounts = get_count(id)
     return render_template("liveCount.html", core = core, now = now, votingDetail = votingDetail, votingCounts = votingCounts, id_voting = id)
-
-def send_email(email):
-    msg = Message(
-        subject='Reset Password Akun KlikVoting',
-        sender=app.config.get('MAIL_USERNAME'),
-        recipients=[email],
-        html = render_template('emailReset.html')
-    )
-    mail.send(msg)
-
-    flash('Link reset password telah dikirim ke email Anda', 'success')
-    return redirect('/')
 
 # SUPPORT FUNCTION =============================================================
 
