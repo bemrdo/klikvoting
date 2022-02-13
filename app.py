@@ -545,14 +545,17 @@ def login():
 
         elif user['submit'] == 'request-email':
             organizer_email = user['request_email']
-            msg = Message(
-                subject='Reset Password Akun KlikVoting',
-                sender=app.config.get('MAIL_USERNAME'),
-                recipients=[organizer_email],
-                html = render_template('emailReset.html')
-            )
-            mail.send(msg)
-            flash('Link reset password telah dikirim ke email Anda', 'success')
+            if (check_email(organizer_email)) :
+                msg = Message(
+                    subject='Reset Password Akun KlikVoting',
+                    sender=app.config.get('MAIL_USERNAME'),
+                    recipients=[organizer_email],
+                    html = render_template('emailReset.html')
+                )
+                mail.send(msg)
+                flash('Link reset password telah dikirim ke email Anda', 'success')
+            else :
+                flash('Email Anda belum terdaftar', 'danger')
             return redirect('/')
 
 
@@ -579,12 +582,9 @@ def registration():
         institution = user['institution']
         created_at = str(datetime.now() + timedelta(hours = 8))
 
-        cur = mysql.connection.cursor()
-        resultValue = cur.execute("SELECT email FROM user WHERE email = %s", [email])
-        if resultValue > 0:
+        if (check_email(email)):
             flash('Email telah terdaftar, silahkan gunakan email lain', 'danger')
             return redirect(request.url)
-        cur.close()
 
         if 'card_id' not in request.files:
             flash('Tidak dapat memuat Foto Kartu ID', 'warning')
@@ -1694,6 +1694,14 @@ def get_viewer(id):
         viewer = None
     cur.close()
     return viewer
+
+def check_email(email):
+    cur = mysql.connection.cursor()
+    resultValue = cur.execute("SELECT email FROM user WHERE email = %s", [email])
+    if resultValue > 0:
+        return True
+    else:
+        return False
 
 # VOTING FUNCTION ==============================================================
 
