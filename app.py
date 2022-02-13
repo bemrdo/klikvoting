@@ -552,6 +552,12 @@ def login():
                     recipients=[organizer_email],
                     html = render_template('emailReset.html')
                 )
+                reset_key = generate_id()
+                reset_key_created = str(datetime.now() + timedelta(hours = 8))
+                cur = mysql.connection.cursor()
+                cur.execute("UPDATE user SET reset_key = %s, reset_key_created WHERE email = %s", (reset_key, reset_key_created, email))
+                mysql.connection.commit()
+                cur.close()
                 mail.send(msg)
                 flash('Link reset password telah dikirim ke email Anda', 'success')
             else :
