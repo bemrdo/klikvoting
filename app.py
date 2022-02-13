@@ -519,8 +519,8 @@ def appVotingPageLogout():
 def login():
     core = {'title':'Login Organizer'}
     if request.method == 'POST':
-        if data['submit'] == 'login':
-            user = request.form
+        user = request.form
+        if user['submit'] == 'login':
             email = user['email']
             password = user['password']
 
@@ -543,8 +543,8 @@ def login():
                 return render_template('login.html', core = core)
             return redirect('/' + session['role'] + '/dashboard/')
 
-        elif data['submit'] == 'request-email':
-            organizer_email = data['request_email']
+        elif user['submit'] == 'request-email':
+            organizer_email = user['request_email']
             msg = Message(
                 subject='Reset Password Akun KlikVoting',
                 sender=app.config.get('MAIL_USERNAME'),
