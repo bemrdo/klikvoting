@@ -92,5 +92,40 @@
     </div>
 </footer>
 
+<!-- Modal Change Pass -->
+<div class="modal fade" id="request-reset" tabindex="-1" role="dialog" aria-labelledby="request-reset" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-bolder text-gradient text-dark">Ubah Kata Sandi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body align-middle">
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" placeholder="Kata Sandi" aria-label="Kata Sandi" aria-describedby="password-addon" name="current_pass" id="currentPasswordInput" required>
+                        <label class="text-muted h6" for="currentPasswordInput">Kata Sandi Saat Ini</label>
+                    </div>
+                    <p class="h6 ps-1 text-gradient text-primary ">Kata Sandi Baru</p>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" placeholder="Kata Sandi" aria-label="Kata Sandi" aria-describedby="password-addon" name="new_pass" id="passwordInput" required>
+                        <label class="text-muted h6" for="passwordInput">Kata Sandi</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" placeholder="Konfirmasi Kata Sandi" aria-label="Konfirmasi Kata Sandi" aria-describedby="confirm-password-addon" name="confirm_new_pass" id="confirmPasswordInput" required>
+                        <label class="text-muted h6" for="confirmPasswordInput">Konfirmasi Kata Sandi</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-gradient-secondary my-0" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" name="submit" value="change-pass" class="btn bg-gradient-dark my-0">Kirim</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 {% include '_script.html' %}
 {% endblock %}
