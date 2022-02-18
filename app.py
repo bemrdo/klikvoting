@@ -1371,7 +1371,7 @@ def reset_password(reset_key):
 
     if request.method == 'POST':
         user = request.form
-        if user['submit'] = 'reset-password':
+        if user['submit'] == 'reset-password':
             if user['password'] != user['confirm_password']:
                 flash('Kata sandi tidak sama! Silahkan ulangi kembali', 'warning')
                 return render_template('registration.html', core = core)
