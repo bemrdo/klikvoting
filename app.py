@@ -504,7 +504,7 @@ def appVotingPageLogout():
     flash('Anda berhasil Logout', 'secondary')
     return redirect('/voting-page/login/')
 
-@app.route("/reset/<string:key>/")
+@app.route("/reset/<string:key>/", methods = ['GET', 'POST'])
 def appReset(key):
     reset_key = key
     return reset_password(reset_key)
@@ -545,7 +545,7 @@ def login():
                 reset_key_created = str(datetime.now() + timedelta(hours = 8))
                 time_left = reset_key_created.split('.')[0] + ' WITA'
                 msg = Message(
-                    subject='Reset Kata Sandi Akun KlikVoting',
+                    subject='Ganti Kata Sandi Akun KlikVoting',
                     sender=app.config.get('MAIL_USERNAME'),
                     recipients=[organizer_email],
                     html = render_template('emailReset.html', reset_key = reset_key, time_left = time_left)
@@ -555,7 +555,7 @@ def login():
                 mysql.connection.commit()
                 cur.close()
                 mail.send(msg)
-                flash('Link reset password telah dikirim ke email Anda', 'success')
+                flash('Link ganti kata sandi telah dikirim ke email Anda', 'success')
             else :
                 flash('Email Anda belum terdaftar', 'danger')
             return redirect('/')
@@ -1367,20 +1367,40 @@ def live_count(id):
     return render_template("liveCount.html", core = core, now = now, votingDetail = votingDetail, votingCounts = votingCounts, id_voting = id)
 
 def reset_password(reset_key):
-    core = {'title':'Reset Kata Sandi'}
+    core = {'title':'Ganti Kata Sandi'}
+
+    if request.method == 'POST':
+        user = request.form
+        if user['submit'] = 'reset-password':
+            if user['password'] != user['confirm_password']:
+                flash('Kata sandi tidak sama! Silahkan ulangi kembali', 'warning')
+                return render_template('registration.html', core = core)
+
+            passhash = generate_password_hash(user['password'])
+            cur = mysql.connection.cursor()
+            cur.execute("UPDATE user SET pass = %s WHERE reset_key = %s", (passhash, reset_key))
+            mysql.connection.commit()
+            cur.execute("UPDATE user SET reset_key = NULL WHERE reset_key = %s", (reset_key))
+            mysql.connection.commit()
+            cur.close()
+
+            flash('Kata sandi telah berhasil diperbaharui', 'success')
+            return redirect('/')
+
     cur = mysql.connection.cursor()
     resultValue = cur.execute("SELECT reset_key_created FROM user WHERE reset_key = %s", [reset_key])
     if resultValue > 0:
         now = datetime.now() + timedelta(hours = 8)
         reset_key_limit = cur.fetchone()['reset_key_created'] + timedelta(days = 1)
-
+        cur.close()
         if now < reset_key_limit:
             return render_template('resetPage.html', reset_key = reset_key, core = core)
         else:
-            flash('Link telah kadaluarsa, silahkan melakukan permintaan reset kata sandi kembali', 'danger')
+            flash('Link telah kadaluarsa, silahkan melakukan permintaan ganti kata sandi kembali', 'danger')
     else:
-        flash('Link tidak dapat digunakan, silahkan melakukan permintaan reset kata sandi kembali', 'danger')
+        flash('Link tidak dapat digunakan, silahkan melakukan permintaan ganti kata sandi kembali', 'danger')
 
+    cur.close()
     return redirect('/')
 
 # SUPPORT FUNCTION =============================================================
