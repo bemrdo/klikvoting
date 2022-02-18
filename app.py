@@ -1367,6 +1367,7 @@ def live_count(id):
     return render_template("liveCount.html", core = core, now = now, votingDetail = votingDetail, votingCounts = votingCounts, id_voting = id)
 
 def reset_password(reset_key):
+    core = {'title':'Reset Kata Sandi'}
     cur = mysql.connection.cursor()
     resultValue = cur.execute("SELECT reset_key_created FROM user WHERE reset_key = %s", [reset_key])
     if resultValue > 0:
@@ -1374,7 +1375,7 @@ def reset_password(reset_key):
         reset_key_limit = cur.fetchone()['reset_key_created'] + timedelta(days = 1)
 
         if now < reset_key_limit:
-            return render_template('resetPage.html', reset_key = reset_key)
+            return render_template('resetPage.html', reset_key = reset_key, core = core)
         else:
             flash('Link telah kadaluarsa, silahkan melakukan permintaan reset kata sandi kembali', 'danger')
     else:
