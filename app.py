@@ -740,7 +740,9 @@ def report_voting(id_voting):
         userDetail = cur.fetchone()
     else:
         userDetail = None
-    rresultValue = cur.execute("SELECT id_hash, id_candidate, created_at, status FROM h_{}".format(id_voting))
+
+    resultValue = cur.execute("SELECT h.id_hash, h.encrypted, h.created_at, h.role, h.status, COALESCE(v.name, c.name) AS fullname FROM h_{} h LEFT JOIN v_{} v on h.id_hash = v.status LEFT JOIN c_{} c on h.id_hash = c.status".format(id_voting, id_voting, id_voting))
+    # resultValue = cur.execute("SELECT id_hash, id_candidate, created_at, status FROM h_{}".format(id_voting))
     if resultValue > 0:
         reportLogs = cur.fetchall()
     else:

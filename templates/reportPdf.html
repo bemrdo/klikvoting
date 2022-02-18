@@ -143,8 +143,7 @@
         <thead>
             <tr class="bor-two">
                 <th class="text-uppercase text-sm font-weight-bolder fit">No</th>
-                <th class="text-uppercase text-sm font-weight-bolder fit">ID Hash</th>
-                <th class="text-uppercase text-sm font-weight-bolder fit">ID Candidate</th>
+                <th class="text-uppercase text-sm font-weight-bolder fit">Nama Pemilih</th>
                 <th class="text-uppercase text-sm font-weight-bolder fit">Waktu Voting</th>
                 <th class="text-uppercase text-sm font-weight-bolder fit">Status</th>
             </tr>
@@ -154,8 +153,7 @@
             {% for reportLog in reportLogs: %}
             <tr class="text-sm">
                 <td class="text-center">{{loop.index}}</td>
-                <td class="text-center text-wrap">{{reportLog['id_hash']}}</td>
-                <td class="text-center">{{reportLog['id_candidate']}}</td>
+                <td class="text-left text-wrap">{{reportLog['fullname']}}</td>
                 <td class="text-center">{{reportLog['created_at']}}</td>
                 <td class="text-center">
                     {% if reportLog['status'] == 'checked': %}
