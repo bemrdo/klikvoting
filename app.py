@@ -552,9 +552,10 @@ def login():
                 reset_key_created = str(reset_key_created)
                 time_left = time_left.split('.')[0] + ' WITA'
                 msg = Message(
-                    subject='Ganti Kata Sandi Akun KlikVoting',
-                    sender=app.config.get('MAIL_USERNAME'),
-                    recipients=[organizer_email],
+                    subject = 'Ganti Kata Sandi Akun KlikVoting',
+                    sender = "KlikVoting",
+                    # sender = app.config.get('MAIL_USERNAME'),
+                    recipients = [organizer_email],
                     html = render_template('emailReset.html', reset_key = reset_key, time_left = time_left)
                 )
                 cur = mysql.connection.cursor()
