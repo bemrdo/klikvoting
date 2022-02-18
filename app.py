@@ -509,6 +509,11 @@ def appReset(key):
     reset_key = key
     return reset_password(reset_key)
 
+@app.route("/reset-cancel/<string:key>/")
+def appResetCancel(key):
+    reset_key = key
+    return reset_cancel(reset_key)
+
 # MAIN FUNCTION ================================================================
 
 def login():
@@ -1367,6 +1372,14 @@ def live_count(id):
     votingDetail = get_voting(id)
     votingCounts = get_count(id)
     return render_template("liveCount.html", core = core, now = now, votingDetail = votingDetail, votingCounts = votingCounts, id_voting = id)
+
+def reset_cancel(reset_key):
+    cur = mysql.connection.cursor()
+    cur.execute("UPDATE user SET reset_key = NULL WHERE reset_key = %s", (reset_key))
+    mysql.connection.commit()
+    cur.close()
+    flash('Permintaan kata sandi telah dibatalkan', 'warning')
+    return redirect('/')
 
 def reset_password(reset_key):
     core = {'title':'Ganti Kata Sandi'}
