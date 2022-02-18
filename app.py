@@ -1379,8 +1379,8 @@ def reset_cancel(reset_key):
     if resultValue > 0:
         cur.execute("UPDATE user SET reset_key = NULL WHERE reset_key = %s", (reset_key))
         mysql.connection.commit()
-    cur.close()
-    flash('Permintaan kata sandi telah dibatalkan', 'warning')
+        cur.close()
+        flash('Permintaan ganti kata sandi telah dibatalkan', 'warning')
     return redirect('/')
 
 def reset_password(reset_key):
