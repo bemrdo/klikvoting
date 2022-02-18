@@ -505,7 +505,7 @@ def appVotingPageLogout():
     return redirect('/voting-page/login/')
 
 @app.route("/reset/<string:key>/")
-def appReset():
+def appReset(key):
     reset_key = key
     return reset_password(reset_key)
 
