@@ -1377,7 +1377,7 @@ def reset_cancel(reset_key):
     cur = mysql.connection.cursor()
     resultValue = cur.execute("SELECT reset_key_created FROM user WHERE reset_key = %s", [reset_key])
     if resultValue > 0:
-        cur.execute("UPDATE user SET reset_key = NULL WHERE reset_key = %s", (reset_key))
+        cur.execute("UPDATE user SET reset_key = NULL WHERE reset_key = %s", [reset_key])
         mysql.connection.commit()
         cur.close()
         flash('Permintaan ganti kata sandi telah dibatalkan', 'warning')
@@ -1397,7 +1397,7 @@ def reset_password(reset_key):
             cur = mysql.connection.cursor()
             cur.execute("UPDATE user SET pass = %s WHERE reset_key = %s", (passhash, reset_key))
             mysql.connection.commit()
-            cur.execute("UPDATE user SET reset_key = NULL WHERE reset_key = %s", (reset_key))
+            cur.execute("UPDATE user SET reset_key = NULL WHERE reset_key = %s", [reset_key])
             mysql.connection.commit()
             cur.close()
 
