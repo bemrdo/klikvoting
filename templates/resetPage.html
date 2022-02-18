@@ -1,23 +1,6 @@
 {% extends 'base.html' %}
 {% block sub_content %}
 
-<div class="container position-sticky z-index-sticky top-0 d-none d-md-block">
-    <div class="row">
-        <div class="col-6">
-            <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-transparent position-absolute top-0 z-index-3 w-100 shadow-none my-3 mt-4">
-                <div class="container-fluid">
-                    <ul class="navbar-nav ml">
-                        <li class="nav-item">
-                            <h1 class="font-weight-bolder text-white ms-login">KlikVoting</h1>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-            <!-- End Navbar -->
-        </div>
-    </div>
-</div>
 <main class="main-content mt-0">
     <section>
         <div class="page-header align-items-start min-vh-50 pt-3 pb-11 m-3 border-radius-lg" style="background-image: url('{{url_for('static', filename='images/core/registration.jpg')}}');">
@@ -25,9 +8,7 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-5 text-center mx-auto">
-                        <h1 class="display-2 font-weight-bolder text-white d-block d-md-none">KlikVoting</h1>
-                        <h3 class="text-white mb-2 mt-md-7 mt-3">Registrasi Akun</h3>
-                        <p class="text-lead text-white">Buat akun Organizer dan kelola voting Anda</p>
+                        <h1 class="display-2 font-weight-bolder">KlikVoting</h1>
                     </div>
                 </div>
             </div>
@@ -38,8 +19,8 @@
                     <div class="card z-index-0">
                         <div class="card-header text-center pt-4 pb-0">
                             <div class="position-relative text-center">
-                                <p class="text-sm font-weight-bold mb-2 text-secondary text-border d-inline z-index-2 bg-white px-3 d-none d-sm-block">Lengkapi data berikut dengan benar</p>
-                                <p class="text-sm font-weight-bold mb-2 text-secondary px-3 d-block d-sm-none">Lengkapi data berikut dengan benar</p>
+                              <h3 class="text-white mb-2 mt-md-7 mt-3">Reset Kata Sandi</h3>
+                              <p class="text-lead text-white">Buat akun Organizer dan kelola voting Anda</p>
                             </div>
                         </div>
                         <div class="card-body">
