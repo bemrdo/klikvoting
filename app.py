@@ -482,16 +482,6 @@ def appVotingPageLoginCredential(id_voting, username, password):
     except:
         return voting_login_credential(id_voting, username, password)
 
-# @app.route("/voting-page/keluhan/", methods = ['GET', 'POST'])
-# def appVotingPageKeluhan():
-#     try:
-#         if session['login'] == True and (session['role'] == 'candidate' or session['role'] == 'voter'):
-#             return voting_keluhan()
-#         else:
-#             return redirect('/voting-page/login/')
-#     except:
-#         return redirect('/voting-page/login/')
-
 @app.route("/live-count/<string:id>/")
 def appLiveCount(id):
     viewer = get_viewer(id)
@@ -513,6 +503,11 @@ def appVotingPageLogout():
     logout()
     flash('Anda berhasil Logout', 'secondary')
     return redirect('/voting-page/login/')
+
+@app.route("/reset/<string:key>/")
+def appReset():
+    reset_key = key
+    return reset_password(reset_key)
 
 # MAIN FUNCTION ================================================================
 
@@ -1370,6 +1365,22 @@ def live_count(id):
     votingDetail = get_voting(id)
     votingCounts = get_count(id)
     return render_template("liveCount.html", core = core, now = now, votingDetail = votingDetail, votingCounts = votingCounts, id_voting = id)
+
+def reset_password(reset_key):
+    cur = mysql.connection.cursor()
+    resultValue = cur.execute("SELECT reset_key_created FROM user WHERE reset_key = %s", [reset_key])
+    if resultValue > 0:
+        now = datetime.now() + timedelta(hours = 8)
+        reset_key_limit = cur.fetchone()['reset_key_created'] + timedelta(days = 1)
+
+        if now < reset_key_limit:
+            return render_template('resetPage', reset_key = reset_key)
+        else:
+            flash('Link telah kadaluarsa, silahkan melakukan permintaan reset kata sandi kembali', 'danger')
+    else:
+        flash('Link tidak dapat digunakan, silahkan melakukan permintaan reset kata sandi kembali', 'danger')
+
+    return redirect('/')
 
 # SUPPORT FUNCTION =============================================================
 
