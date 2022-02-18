@@ -548,7 +548,7 @@ def login():
             if (check_email(organizer_email)) :
                 reset_key = generate_id() + generate_id()
                 reset_key_created = str(datetime.now() + timedelta(hours = 8))
-                time_left = convert_datetime('lts', reset_key_created) + ' WITA'
+                time_left = reset_key_created.split('.')[0] + ' WITA'
                 msg = Message(
                     subject='Reset Kata Sandi Akun KlikVoting',
                     sender=app.config.get('MAIL_USERNAME'),
