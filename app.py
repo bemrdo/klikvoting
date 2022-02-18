@@ -1374,7 +1374,7 @@ def reset_password(reset_key):
         reset_key_limit = cur.fetchone()['reset_key_created'] + timedelta(days = 1)
 
         if now < reset_key_limit:
-            return render_template('resetPage', reset_key = reset_key)
+            return render_template('resetPage.html', reset_key = reset_key)
         else:
             flash('Link telah kadaluarsa, silahkan melakukan permintaan reset kata sandi kembali', 'danger')
     else:
