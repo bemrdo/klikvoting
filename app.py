@@ -1709,7 +1709,7 @@ def check_idle(id):
 
 def get_report_finish(id):
     cur = mysql.connection.cursor()
-    resultValue = cur.execute("SELECT c.name, c.id_candidate, COUNT(h.id_candidate) as res FROM c_{} c LEFT JOIN h_{} h ON c.id_candidate = h.id_candidate GROUP BY c.id_candidate ORDER BY res DESC".format(id, id))
+    resultValue = cur.execute("SELECT c.name, c.id_candidate, COUNT(h.id_candidate) as res FROM c_{} c LEFT JOIN h_{} h ON c.id_candidate = h.id_candidate GROUP BY c.id_candidate ORDER BY res DESC, created_at".format(id, id))
     if resultValue > 0:
         report = []
         candidates = cur.fetchall()
@@ -1851,7 +1851,7 @@ def vote_hash(id_candidate):
 
 def get_count(id):
     cur = mysql.connection.cursor()
-    resultValue = cur.execute("SELECT c.id_candidate, c.name, c.description, c.avatar, COUNT(h.id_candidate) AS result FROM c_{} c LEFT JOIN h_{} h ON c.id_candidate = h.id_candidate GROUP BY c.id_candidate ORDER BY result DESC".format(id, id))
+    resultValue = cur.execute("SELECT c.id_candidate, c.name, c.description, c.avatar, COUNT(h.id_candidate) AS result FROM c_{} c LEFT JOIN h_{} h ON c.id_candidate = h.id_candidate GROUP BY c.id_candidate ORDER BY result DESC, created_at".format(id, id))
     if resultValue > 0:
         votingResults = cur.fetchall()
     else:
