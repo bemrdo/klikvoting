@@ -611,6 +611,16 @@ def registration():
             "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)", (id_user, name, email, number, passhash, address, institution, filename, created_at))
             mysql.connection.commit()
             cur.close()
+
+            msg = Message(
+                subject = 'Registrasi Akun KlikVoting',
+                sender = "KlikVoting",
+                # sender = app.config.get('MAIL_USERNAME'),
+                recipients = [email],
+                html = render_template('emailRegistration.html', name = name, email = email)
+            )
+            mail.send(msg)
+
             flash('Akun Organizer berhasil dibuat! Silahkan Login untuk melanjutkan', 'secondary')
             return redirect('/login/')
         else:
