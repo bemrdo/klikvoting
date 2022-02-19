@@ -1371,7 +1371,7 @@ def voting_page():
     else:
         userProblems = None
 
-    resultValue = cur.execute("SELECT id_candidate, name, description, avatar FROM c_{}".format(session['id_voting']))
+    resultValue = cur.execute("SELECT id_candidate, name, description, avatar FROM c_{} ORDER BY created_at".format(session['id_voting']))
     if resultValue > 0:
         candidates = cur.fetchall()
         cur.close()
